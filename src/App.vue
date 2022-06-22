@@ -1,21 +1,27 @@
 <script setup lang="ts">
-// This starter template is using Vue 3 <script setup> SFCs
-// Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
-import HelloWorld from './components/HelloWorld.vue'
+import { invoke } from "@tauri-apps/api";
+
+const doGreet = () => {
+    invoke('greet', { msg: 'hello' })
+        .then((res) => {
+            console.log('res', res)
+        })
+        .catch((err) => {
+            console.log('failed to invoke greet')
+        })
+}
 </script>
 
 <template>
-  <img alt="Vue logo" src="./assets/logo.png" />
-  <HelloWorld msg="Hello Vue 3 + TypeScript + Vite" />
+    <div class="app">
+        <button @click="doGreet">greet</button>
+    </div>
 </template>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+.app {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
 }
 </style>
