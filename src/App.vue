@@ -7,7 +7,7 @@ const doGreet = () => {
             console.log('res', res)
         })
         .catch((err) => {
-            console.log('failed to invoke greet')
+            console.log('failed to invoke greet', err)
         })
 }
 </script>
