@@ -1,18 +1,17 @@
 <script lang="ts" setup>
 import AppBanner from "@/layouts/AppBanner.vue";
 import { useGlobal } from "@/stores/useGlobal";
-import { computed } from "vue";
 
-const theme = computed(() => useGlobal().theme)
+const global = useGlobal()
 </script>
 
 <template>
-    <div :class="['index', theme]">
+    <div :class="['index', global.theme]">
         <div class="app-banner-container">
             <AppBanner/>
         </div>
         <div class="app-view-container">
-            {{ theme }}
+
         </div>
     </div>
 </template>
