@@ -1,6 +1,7 @@
 // style
 import "element-plus/dist/index.css";
-import "@/styles/light_dark.scss";
+import "@/fonts/iconfont.css";
+import "@/styles/theme.scss";
 import "@/styles/index.scss";
 
 // core

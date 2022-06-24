@@ -1,0 +1,44 @@
+{
+  "id": "3484085",
+  "name": "toca",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "12009171",
+      "name": "武术1",
+      "font_class": "wushu",
+      "unicode": "e601",
+      "unicode_decimal": 58881
+    },
+    {
+      "icon_id": "129218",
+      "name": "sun",
+      "font_class": "sun",
+      "unicode": "e88e",
+      "unicode_decimal": 59534
+    },
+    {
+      "icon_id": "1196846",
+      "name": "exit-1",
+      "font_class": "exit-1",
+      "unicode": "e623",
+      "unicode_decimal": 58915
+    },
+    {
+      "icon_id": "19665052",
+      "name": "字体大小",
+      "font_class": "font-size",
+      "unicode": "eaef",
+      "unicode_decimal": 60143
+    },
+    {
+      "icon_id": "25555523",
+      "name": "暗黑模式",
+      "font_class": "dark",
+      "unicode": "e72f",
+      "unicode_decimal": 59183
+    }
+  ]
+}
