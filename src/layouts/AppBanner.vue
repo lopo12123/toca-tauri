@@ -7,9 +7,14 @@ const global = useGlobal()
 
 <template>
     <div class="app-banner">
-        <div class="btn-box" @click="global.toggleTheme">
-            {{ global.theme }}
-        </div>
+        <ElTooltip
+            placement="right"
+            content="切换主题"
+            :effect="global.theme === 'dark' ? 'light' : 'dark'">
+            <div class="btn-box" @click="global.toggleTheme">
+                o
+            </div>
+        </ElTooltip>
     </div>
 </template>
 
