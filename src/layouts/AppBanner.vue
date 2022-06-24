@@ -2,19 +2,137 @@
 import { useGlobal } from "@/stores/useGlobal";
 
 const global = useGlobal()
+const tooltips = {
+    theme: {
+        light: '使用夜间模式',
+        dark: '使用日间模式',
+    },
+    elder: {
+        enable: '关闭老年模式',
+        disable: '开启老年模式'
+    }
+}
 
+type ToolItem = 'theme' | 'elder'
+    | 'bug' | 'issue' | 'min'
+    | 'max' | 'refresh' | 'exit'
+const useTools = (type: ToolItem) => {
+    switch(type) {
+        case "theme":
+            global.toggleTheme()
+            break
+        case "elder":
+            global.toggleElderMode()
+            break
+        case "bug":
+
+            break
+        case "issue":
+
+            break
+        case "min":
+
+            break
+        case "max":
+
+            break
+        case "refresh":
+            window.location.reload()
+            break
+        case "exit":
+
+            break
+    }
+    console.log('执行: ', type)
+}
 </script>
 
 <template>
     <div class="app-banner">
-        <ElTooltip
-            placement="right"
-            content="切换主题"
-            :effect="global.theme === 'dark' ? 'light' : 'dark'">
-            <div class="btn-box" @click="global.toggleTheme">
-                o
-            </div>
-        </ElTooltip>
+        <div class="logo-container">
+            <i class="iconfont icon-wushu"/>
+        </div>
+
+        <div class="tool-list-container">
+            <i class="separator-line"/>
+            <ElTooltip
+                placement="right"
+                :content="tooltips.theme[global.theme]"
+                :effect="global.theme === 'dark' ? 'light' : 'dark'">
+                <div class="btn-box" @click="useTools('theme')">
+                    <i class="iconfont icon-moonyueliang" v-if="global.theme === 'light'"/>
+                    <i class="iconfont icon-sun" v-if="global.theme === 'dark'"/>
+                </div>
+            </ElTooltip>
+
+            <ElTooltip
+                placement="right"
+                :content="tooltips.elder[global.elderMode]"
+                :effect="global.theme === 'dark' ? 'light' : 'dark'">
+                <div :class="['btn-box', global.elderMode === 'enable' ? 'btn-box__selected' : '']"
+                     @click="useTools('elder')">
+                    <i class="iconfont icon-grandpa"/>
+                </div>
+            </ElTooltip>
+
+            <ElTooltip
+                placement="right"
+                content="Bug反馈"
+                :effect="global.theme === 'dark' ? 'light' : 'dark'">
+                <div class="btn-box" @click="useTools('bug')">
+                    <i class="iconfont icon-bug"/>
+                </div>
+            </ElTooltip>
+
+            <ElTooltip
+                placement="right"
+                content="建议/意见"
+                :effect="global.theme === 'dark' ? 'light' : 'dark'">
+                <div class="btn-box" @click="useTools('issue')">
+                    <i class="iconfont icon-fankuiyijian"/>
+                </div>
+            </ElTooltip>
+        </div>
+
+        <div class="sys-list-container">
+            <i class="separator-line"/>
+
+            <ElTooltip
+                placement="right"
+                content="最小化"
+                :effect="global.theme === 'dark' ? 'light' : 'dark'">
+                <div class="btn-box" @click="useTools('min')">
+                    <i class="iconfont icon-zuoxiajiao-"/>
+                </div>
+            </ElTooltip>
+
+            <ElTooltip
+                placement="right"
+                content="最大化"
+                :effect="global.theme === 'dark' ? 'light' : 'dark'">
+                <div class="btn-box" @click="useTools('max')">
+                    <i class="iconfont icon-fangda1"/>
+                </div>
+            </ElTooltip>
+
+            <ElTooltip
+                placement="right"
+                content="重新载入"
+                :effect="global.theme === 'dark' ? 'light' : 'dark'">
+                <div class="btn-box" @click="useTools('refresh')">
+                    <i class="iconfont icon-shuaxin"/>
+                </div>
+            </ElTooltip>
+
+            <ElTooltip
+                placement="right"
+                content="退出"
+                :effect="global.theme === 'dark' ? 'light' : 'dark'">
+                <div class="btn-box" @click="useTools('exit')">
+                    <i class="iconfont icon-qp_icon_exit"/>
+                </div>
+            </ElTooltip>
+        </div>
     </div>
 </template>
 
@@ -22,6 +140,72 @@ const global = useGlobal()
 .app-banner {
     position: relative;
     width: 100%;
-    height: 100%;
+    height: calc(100% - 1rem);
+    padding: 0.5rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+
+    .logo-container {
+        position: relative;
+        width: 1.5rem;
+        height: 1.5rem;
+        text-align: center;
+        line-height: 1.5rem;
+
+        i {
+            font-size: 1.5rem;
+        }
+    }
+
+    .tool-list-container {
+        position: relative;
+        width: 100%;
+        height: calc(100% - 8.5rem);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+    }
+
+    .sys-list-container {
+        position: relative;
+        width: 100%;
+        height: 7rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .btn-box {
+        position: relative;
+        width: 1.5rem;
+        height: 1.5rem;
+        font-size: 1rem;
+        text-align: center;
+        line-height: 1.5rem;
+        cursor: pointer;
+
+        &:hover {
+            outline: solid 1px var(--separator-stroke);
+            background-color: var(--background-hover);
+        }
+    }
+
+    .btn-box__selected {
+        outline: solid 1px var(--separator-stroke);
+        background-color: var(--background-hover);
+    }
+
+    .separator-line {
+        width: 1.5rem;
+        height: 0;
+        margin: 0.5rem 0;
+        border-bottom: solid 1px var(--separator-stroke);
+        display: block;
+    }
+
 }
 </style>
