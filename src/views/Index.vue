@@ -18,6 +18,8 @@ const theme = computed(() => useGlobal().theme)
 </template>
 
 <style lang="scss" scoped>
+$banner-width: 2rem;
+
 .index {
     position: relative;
     width: 100vw;
@@ -30,12 +32,14 @@ const theme = computed(() => useGlobal().theme)
 
     .app-banner-container {
         position: relative;
-        width: 50px;
+        width: $banner-width;
         height: 100vh;
+        border-right: solid 1px var(--separator-stroke);
     }
 
     .app-view-container {
         position: relative;
+        width: calc(100% - #{$banner-width} - 1px);
         height: 100vh;
     }
 }
