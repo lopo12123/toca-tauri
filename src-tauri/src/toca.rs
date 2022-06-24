@@ -80,14 +80,14 @@ impl Toca {
                 }
                 Action::MouseLeft { delay, xy, db } => {
                     set_timeout(|| {
-                        self.instance.mouse_move_to(x[0], y[0]);
+                        self.instance.mouse_move_to(xy[0], xy[0]);
                         self.instance.mouse_click(MouseButton::Left);
                         if db { self.instance.mouse_click(MouseButton::Left); }
                     }, delay);
                 }
                 Action::MouseRight { delay, xy, db } => {
                     set_timeout(|| {
-                        self.instance.mouse_move_to(x[0], y[0]);
+                        self.instance.mouse_move_to(xy[0], xy[0]);
                         self.instance.mouse_click(MouseButton::Right);
                         if db { self.instance.mouse_click(MouseButton::Right); }
                     }, delay);
