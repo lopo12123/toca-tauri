@@ -13,17 +13,17 @@ fn set_timeout(mut callback: impl FnMut() -> (), timeout: u64) {
 /// type of action to play in pipeline
 #[allow(unused)]
 pub enum Action {
-    /// mouse move absolutely
-    MouseMoveAbsolute { delay: u64, target: [i32; 2] },
-    /// mouse move relatively
-    MouseMoveRelative { delay: u64, offset: [i32; 2] },
-    /// mouse left-click
-    MouseLeft { delay: u64 },
-    /// mouse right-click
-    MouseRight { delay: u64 },
-    /// key click
+    /// delay 毫秒后, 移动到 (x, y)
+    MouseMoveAbsolute { delay: u64, xy: [i32; 2] },
+    /// delay 毫秒后, 移动 (dx, dy)
+    MouseMoveRelative { delay: u64, xy: [i32; 2] },
+    /// delay 毫秒后, 在 (x, y) 处左键单(双)击
+    MouseLeft { delay: u64, xy: [i32; 2], db: bool },
+    /// delay 毫秒后, 在 (x, y) 处右键键单(双)击
+    MouseRight { delay: u64, xy: [i32; 2], db: bool },
+    /// delay 毫秒后, 点击 key
     KeyClick { delay: u64, key: Key },
-    /// key press
+    /// delay 毫秒后, 按下 key 并在 duration 毫秒后释放
     KeyPress { delay: u64, key: Key, duration: u64 },
 }
 
@@ -68,24 +68,28 @@ impl Toca {
         let mut p = 0;
         while p < self.actions.len() {
             match self.actions[p] {
-                Action::MouseMoveAbsolute { delay, target } => {
+                Action::MouseMoveAbsolute { delay, xy } => {
                     set_timeout(|| {
-                        self.instance.mouse_move_to(target[0], target[1]);
+                        self.instance.mouse_move_to(xy[0], xy[1]);
                     }, delay);
                 }
-                Action::MouseMoveRelative { delay, offset } => {
+                Action::MouseMoveRelative { delay, xy } => {
                     set_timeout(|| {
-                        self.instance.mouse_move_relative(offset[0], offset[1]);
+                        self.instance.mouse_move_relative(xy[0], xy[1]);
                     }, delay);
                 }
-                Action::MouseLeft { delay } => {
+                Action::MouseLeft { delay, xy, db } => {
                     set_timeout(|| {
+                        self.instance.mouse_move_to(x[0], y[0]);
                         self.instance.mouse_click(MouseButton::Left);
+                        if db { self.instance.mouse_click(MouseButton::Left); }
                     }, delay);
                 }
-                Action::MouseRight { delay } => {
+                Action::MouseRight { delay, xy, db } => {
                     set_timeout(|| {
+                        self.instance.mouse_move_to(x[0], y[0]);
                         self.instance.mouse_click(MouseButton::Right);
+                        if db { self.instance.mouse_click(MouseButton::Right); }
                     }, delay);
                 }
                 Action::KeyClick { delay, key } => {
