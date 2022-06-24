@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { invoke } from "@tauri-apps/api";
 import { useGlobal } from "@/stores/useGlobal";
 
 const global = useGlobal()
@@ -31,16 +32,31 @@ const useTools = (type: ToolItem) => {
 
             break
         case "min":
-
+            invoke('minimum_window')
+                .then(() => {
+                })
+                .catch((err) => {
+                    console.log(err)
+                })
             break
         case "max":
-
+            invoke('maximum_window')
+                .then(() => {
+                })
+                .catch((err) => {
+                    console.log(err)
+                })
             break
         case "refresh":
             window.location.reload()
             break
         case "exit":
-
+            invoke('exit_app')
+                .then(() => {
+                })
+                .catch((err) => {
+                    console.log(err)
+                })
             break
     }
     console.log('执行: ', type)
@@ -146,6 +162,7 @@ const useTools = (type: ToolItem) => {
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
+    --webkit-app-region: drag;
 
     .logo-container {
         position: relative;
