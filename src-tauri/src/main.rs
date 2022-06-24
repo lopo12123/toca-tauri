@@ -3,6 +3,8 @@ all(not(debug_assertions), target_os = "windows"),
 windows_subsystem = "windows"
 )]
 
+mod toca;
+
 fn main() {
     let context = tauri::generate_context!();
     tauri::Builder::default()
