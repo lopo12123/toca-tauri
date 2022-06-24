@@ -1,11 +1,13 @@
 .light {
     --background: #eee;
-    --text-color: #777;
-    --separator-stroke: #ccc;
+    --background-hover: #ccc;
+    --text-color: #555;
+    --separator-stroke: #777;
 }
 
 .dark {
     --background: #333;
+    --background-hover: #777;
     --text-color: #ccc;
     --separator-stroke: #aaa;
 }
