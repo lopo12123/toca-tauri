@@ -23,7 +23,7 @@
             },
             "externalBin": [],
             "icon": [
-                "icons/toca.ico",
+                "icons/toca.ico"
             ],
             "identifier": "com.tauri.dev",
             "longDescription": "",
