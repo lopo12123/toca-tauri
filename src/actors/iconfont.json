@@ -1,0 +1,58 @@
+{
+  "id": "3468221",
+  "name": "misc",
+  "font_family": "actor_play",
+  "css_prefix_text": "act-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "12009171",
+      "name": "武术1",
+      "font_class": "wushu",
+      "unicode": "e601",
+      "unicode_decimal": 58881
+    },
+    {
+      "icon_id": "12009224",
+      "name": "武术2",
+      "font_class": "wushu1",
+      "unicode": "e602",
+      "unicode_decimal": 58882
+    },
+    {
+      "icon_id": "12023297",
+      "name": "武术3",
+      "font_class": "wushu2",
+      "unicode": "e603",
+      "unicode_decimal": 58883
+    },
+    {
+      "icon_id": "12023298",
+      "name": "武术4",
+      "font_class": "wushu3",
+      "unicode": "e604",
+      "unicode_decimal": 58884
+    },
+    {
+      "icon_id": "12023299",
+      "name": "武术5",
+      "font_class": "wushu4",
+      "unicode": "e605",
+      "unicode_decimal": 58885
+    },
+    {
+      "icon_id": "12023301",
+      "name": "武术6",
+      "font_class": "wushu5",
+      "unicode": "e606",
+      "unicode_decimal": 58886
+    },
+    {
+      "icon_id": "13011665",
+      "name": "武术7",
+      "font_class": "wushu51",
+      "unicode": "e607",
+      "unicode_decimal": 58887
+    }
+  ]
+}

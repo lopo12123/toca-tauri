@@ -1,0 +1,44 @@
+@font-face {
+  font-family: "actor_play"; /* Project id 3468221 */
+  src: url('iconfont.woff2?t=1656147690539') format('woff2'),
+       url('iconfont.woff?t=1656147690539') format('woff'),
+       url('iconfont.ttf?t=1656147690539') format('truetype'),
+       url('iconfont.svg?t=1656147690539#actor_play') format('svg');
+}
+
+.actor_play {
+  font-family: "actor_play" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.act-wushu:before {
+  content: "\e601";
+}
+
+.act-wushu1:before {
+  content: "\e602";
+}
+
+.act-wushu2:before {
+  content: "\e603";
+}
+
+.act-wushu3:before {
+  content: "\e604";
+}
+
+.act-wushu4:before {
+  content: "\e605";
+}
+
+.act-wushu5:before {
+  content: "\e606";
+}
+
+.act-wushu51:before {
+  content: "\e607";
+}
+
