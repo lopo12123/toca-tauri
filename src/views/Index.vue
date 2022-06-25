@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import AppBanner from "@/layouts/AppBanner.vue";
 import { useGlobal } from "@/stores/useGlobal";
+import ActionTimeline from "@/layouts/ActionTimeline.vue";
 
 const global = useGlobal()
 </script>
@@ -11,7 +12,7 @@ const global = useGlobal()
             <AppBanner/>
         </div>
         <div class="app-view-container">
-
+            <ActionTimeline/>
         </div>
     </div>
 </template>
