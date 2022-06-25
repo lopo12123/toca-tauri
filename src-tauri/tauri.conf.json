@@ -17,13 +17,15 @@
         "bundle": {
             "active": true,
             "category": "DeveloperTool",
-            "copyright": "",
+            "copyright": "Copyright (c) Lopo 2022. All rights reserved.",
             "deb": {
                 "depends": []
             },
             "externalBin": [],
             "icon": [
-                "icons/toca.ico"
+                "icons/toca.ico",
+                "icons/32x32.png",
+                "icons/128x128.png"
             ],
             "identifier": "com.tauri.dev",
             "longDescription": "",
@@ -57,8 +59,9 @@
                 "minWidth": 800,
                 "height": 600,
                 "minHeight": 600,
+                "resizable": true,
                 "fullscreen": false,
-                "resizable": true
+                "fileDropEnabled": false
             }
         ]
     }
