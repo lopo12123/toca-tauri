@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { useGlobal } from "@/stores/useGlobal";
 import { appWindow } from "@tauri-apps/api/window";
-import { useNotification } from "@/stores/useNotification";
+import { open } from "@tauri-apps/api/shell";
 
 const global = useGlobal()
 const tooltips = {
@@ -27,10 +27,16 @@ const useTools = (type: ToolItem) => {
             global.toggleElderMode()
             break
         case "bug":
-            useNotification('bug')
+            open('https://github.com/lopo12123/toca-tauri/issues')
+                .catch(err => {
+                    console.log(err)
+                })
             break
         case "issue":
-            useNotification('issue')
+            open('mailto:lopo@zju.edu.cn?subject=Some suggestions/comments for Toca')
+                .catch(err => {
+                    console.log(err)
+                })
             break
         case "min":
             appWindow
@@ -67,12 +73,14 @@ const useTools = (type: ToolItem) => {
 </script>
 
 <template>
-    <div class="app-banner">
-        <div class="logo-container">
+    <div class="app-banner"
+         data-tauri-drag-region
+         @dblclick="useTools('max')">
+        <div class="logo-container" data-tauri-drag-region>
             <i class="iconfont icon-wushu"/>
         </div>
 
-        <div class="tool-list-container">
+        <div class="tool-list-container" data-tauri-drag-region>
             <i class="separator-line"/>
             <ElTooltip
                 placement="right"
@@ -113,7 +121,7 @@ const useTools = (type: ToolItem) => {
             </ElTooltip>
         </div>
 
-        <div class="sys-list-container">
+        <div class="sys-list-container" data-tauri-drag-region>
             <i class="separator-line"/>
 
             <ElTooltip
@@ -165,7 +173,10 @@ const useTools = (type: ToolItem) => {
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    --webkit-app-region: drag;
+
+    .iconfont {
+        pointer-events: none;
+    }
 
     .logo-container {
         position: relative;

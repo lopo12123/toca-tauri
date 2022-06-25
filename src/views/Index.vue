@@ -21,8 +21,9 @@ $banner-width: 2rem;
 
 .index {
     position: relative;
-    width: 100vw;
-    height: 100vh;
+    width: calc(100vw - 2px);
+    height: calc(100vh - 2px);
+    border: solid 1px var(--separator-stroke);
     background-color: var(--background);
     color: var(--text-color);
     display: flex;
