@@ -1,5 +1,6 @@
 // style
 import "element-plus/dist/index.css";
+import "@/actors/iconfont.css";
 import "@/fonts/iconfont.css";
 import "@/styles/theme.scss";
 import "@/styles/index.scss";
