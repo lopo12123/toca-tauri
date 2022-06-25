@@ -1,38 +1,13 @@
-// region action 类型
 import { XMLBuilder, XMLParser } from "fast-xml-parser";
+import { EvMapItem, EvStoreStruct } from "@/scripts/useEv";
 
-type Action_mouse_move = {
-    type: 'absolute' | 'relative'
-    delay: number
-    xy: [ number, number ]
-}
-type Action_mouse_click = {
-    type: 'left' | 'right'
-    delay: number
-    xy: [ number, number ]
-    db: boolean
-}
-type Action_key = {
-    type: 'click'
-    delay: number
-    key: string,
-} | {
-    type: 'press'
-    delay: number
-    key: string,
-    duration: number
-}
-/**
- * @description 全部的 action 类型
- */
-type ActionType = Action_mouse_move | Action_mouse_click | Action_key
-
-// endregion
-
-type XmlObj = {
+type StorageStruct = {
     // xml 根标签
     Toca: {
-        Action: ActionType[]
+        // 事件映射 (可选自定义内容)
+        EvMap: EvMapItem[]
+        // 事件序列
+        Action: EvStoreStruct[]
     }
 }
 
@@ -40,7 +15,7 @@ type XmlObj = {
  * @description xml -> obj
  * @param xml
  */
-const xml2obj = (xml: string): XmlObj => {
+const xml2obj = (xml: string): StorageStruct => {
     return new XMLParser().parse(xml)
 }
 
@@ -48,9 +23,9 @@ const xml2obj = (xml: string): XmlObj => {
  * @description obj -> xml
  * @param obj
  */
-const obj2xml = (obj: XmlObj) => {
+const obj2xml = (obj: StorageStruct) => {
     return new XMLBuilder({}).build(obj)
 }
 
-export type { XmlObj }
+export type { StorageStruct }
 export { xml2obj, obj2xml }
