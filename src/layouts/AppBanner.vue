@@ -2,6 +2,7 @@
 import { useGlobal } from "@/stores/useGlobal";
 import { appWindow } from "@tauri-apps/api/window";
 import { open } from "@tauri-apps/api/shell";
+import { onBeforeUnmount, onMounted, ref } from "vue";
 
 const global = useGlobal()
 const tooltips = {
@@ -70,6 +71,18 @@ const useTools = (type: ToolItem) => {
     }
     console.log('执行: ', type)
 }
+
+const action_list = [ 'act-wushu', 'act-wushu1', 'act-wushu2', 'act-wushu3', 'act-wushu4', 'act-wushu5' ]
+const action_idx = ref(0)
+const action_timer = ref(-1)
+onMounted(() => {
+    action_timer.value = setInterval(() => {
+        action_idx.value = (action_idx.value + 1) % action_list.length
+    }, 1000)
+})
+onBeforeUnmount(() => {
+    clearInterval(action_timer.value)
+})
 </script>
 
 <template>
@@ -77,7 +90,7 @@ const useTools = (type: ToolItem) => {
          data-tauri-drag-region
          @dblclick="useTools('max')">
         <div class="logo-container" data-tauri-drag-region>
-            <i class="iconfont icon-wushu"/>
+            <i :class="['actor_play', action_list[action_idx]]"/>
         </div>
 
         <div class="tool-list-container" data-tauri-drag-region>
@@ -164,6 +177,8 @@ const useTools = (type: ToolItem) => {
 </template>
 
 <style lang="scss" scoped>
+@use "src/styles/mixin";
+
 .app-banner {
     position: relative;
     width: 100%;
@@ -182,8 +197,9 @@ const useTools = (type: ToolItem) => {
         position: relative;
         width: 1.5rem;
         height: 1.5rem;
-        text-align: center;
-        line-height: 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
 
         i {
             font-size: 1.5rem;
@@ -211,13 +227,13 @@ const useTools = (type: ToolItem) => {
     }
 
     .btn-box {
+        @include mixin.pointer-hover;
         position: relative;
         width: 1.5rem;
         height: 1.5rem;
         font-size: 1rem;
         text-align: center;
         line-height: 1.5rem;
-        cursor: pointer;
 
         &:hover {
             outline: solid 1px var(--separator-stroke);
