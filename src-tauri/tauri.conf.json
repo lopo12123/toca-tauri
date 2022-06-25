@@ -54,7 +54,7 @@
         "windows": [
             {
                 "title": "Toca",
-                "decorations": true,
+                "decorations": false,
                 "width": 800,
                 "minWidth": 800,
                 "height": 600,
