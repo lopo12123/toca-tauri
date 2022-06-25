@@ -74,7 +74,7 @@ const useTools = (type: ToolItem) => {
 
 const action_list = [ 'act-wushu', 'act-wushu1', 'act-wushu2', 'act-wushu3', 'act-wushu4', 'act-wushu5' ]
 const action_idx = ref(0)
-const action_timer = ref(-1)
+const action_timer = ref<any>(-1)
 onMounted(() => {
     action_timer.value = setInterval(() => {
         action_idx.value = (action_idx.value + 1) % action_list.length
