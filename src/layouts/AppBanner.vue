@@ -1,6 +1,7 @@
 <script lang="ts" setup>
-import { invoke } from "@tauri-apps/api";
 import { useGlobal } from "@/stores/useGlobal";
+import { appWindow } from "@tauri-apps/api/window";
+import { useNotification } from "@/stores/useNotification";
 
 const global = useGlobal()
 const tooltips = {
@@ -26,35 +27,37 @@ const useTools = (type: ToolItem) => {
             global.toggleElderMode()
             break
         case "bug":
-
+            useNotification('bug')
             break
         case "issue":
-
+            useNotification('issue')
             break
         case "min":
-            invoke('minimum_window')
-                .then(() => {
-                })
-                .catch((err) => {
-                    console.log(err)
+            appWindow
+                .minimize()
+                .catch(err => {
+                    console.log('最小化出错')
                 })
             break
         case "max":
-            invoke('maximum_window')
-                .then(() => {
+            appWindow
+                .isMaximized()
+                .then((isMax) => {
+                    return isMax
+                        ? appWindow.unmaximize()
+                        : appWindow.maximize()
                 })
-                .catch((err) => {
-                    console.log(err)
+                .catch(err => {
+
                 })
             break
         case "refresh":
             window.location.reload()
             break
         case "exit":
-            invoke('exit_app')
-                .then(() => {
-                })
-                .catch((err) => {
+            appWindow
+                .close()
+                .catch(err => {
                     console.log(err)
                 })
             break
