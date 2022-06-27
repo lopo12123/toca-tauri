@@ -5,7 +5,7 @@ type StorageStruct = {
     // xml 根标签
     Toca: {
         // 事件映射 (可选自定义内容)
-        EvMap: EvMapItem[]
+        EvMap?: EvMapItem[]
         // 事件序列
         Action: EvStoreStruct[]
     }
