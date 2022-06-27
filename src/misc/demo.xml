@@ -1,39 +1,49 @@
 <Toca>
-    <Action>
-        <type>absolute</type>
-        <delay>122</delay>
-        <xy>0</xy>
-        <xy>0</xy>
-    </Action>
-    <Action>
-        <type>relative</type>
-        <delay>1000</delay>
-        <xy>95</xy>
-        <xy>100</xy>
-    </Action>
-    <Action>
-        <type>left</type>
-        <delay>333</delay>
-        <xy>50</xy>
-        <xy>50</xy>
-        <db>true</db>
-    </Action>
-    <Action>
-        <type>right</type>
-        <delay>333</delay>
-        <xy>100</xy>
-        <xy>100</xy>
-        <db>false</db>
-    </Action>
+    <EvMap>
+        <code>A</code>
+        <name>key A</name>
+    </EvMap>
+    <EvMap>
+        <code>B</code>
+        <name>key B</name>
+    </EvMap>
     <Action>
         <type>click</type>
-        <delay>0</delay>
-        <key>c</key>
+        <code>A</code>
+        <delay>300</delay>
     </Action>
     <Action>
         <type>press</type>
-        <delay>1000</delay>
-        <key>3</key>
-        <duration>100</duration>
+        <code>B</code>
+        <delay>400</delay>
+        <duration>300</duration>
+    </Action>
+    <Action>
+        <type>left</type>
+        <code>MouseLeft</code>
+        <delay>300</delay>
+        <xy>100</xy>
+        <xy>100</xy>
+    </Action>
+    <Action>
+        <type>right</type>
+        <code>MouseDBLeft</code>
+        <delay>400</delay>
+        <xy>200</xy>
+        <xy>200</xy>
+    </Action>
+    <Action>
+        <type>absolute</type>
+        <code>MoveAbsolute</code>
+        <delay>300</delay>
+        <xy>300</xy>
+        <xy>300</xy>
+    </Action>
+    <Action>
+        <type>relative</type>
+        <code>MoveRelative</code>
+        <delay>300</delay>
+        <xy>400</xy>
+        <xy>400</xy>
     </Action>
 </Toca>
