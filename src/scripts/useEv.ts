@@ -48,14 +48,14 @@ type EvCode = 'A' | 'B'
 type EvStoreStruct = {
     // 事件类型
     type: EvType
+    // 事件值
+    code: EvCode
     // 到上一次触发的时间间隔
     delay: number
     // 鼠标事件(4) - 触发位置
     xy?: [ number, number ]
     // 鼠标点击事件(2) - 是否双击
     db?: boolean
-    // 按键事件(2) - 按键值
-    code?: EvCode
     // 按键事件(1) - 长按按键持续事件
     duration?: number
 }
@@ -78,6 +78,14 @@ class EvMap {
         mappings?.forEach(({ code, name }) => {
             this.#map.set(code, name)
         })
+    }
+
+    /**
+     * @description 获取事件值的映射名(无映射则返回原事件值)
+     * @param code 事件值
+     */
+    get(code: EvCode) {
+        return this.#map.get(code) ?? code
     }
 
     /**
