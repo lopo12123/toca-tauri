@@ -1,4 +1,4 @@
-import { EvCode, EvMap, EvStoreStruct } from "@/scripts/useEv";
+import { EvCode, EvMap, EvMapItem, EvStoreStruct } from "@/scripts/useEv";
 import {
     Binding,
     Diagram,
@@ -13,11 +13,12 @@ import {
     TextBlock,
     ToolManager
 } from "gojs";
+import { obj2xml, StorageStruct, xml2obj } from "@/scripts/useXml";
 
 // region 绘图使用的配置对象
 type GraphNode_head = {
-    // id(事件名)
-    key: string
+    // id(事件值 code)
+    key: EvCode
     // 标签名(事件值或自定义映射名)
     text: string
     isGroup: true
@@ -25,18 +26,17 @@ type GraphNode_head = {
     loc: string
     // 虚线长度
     duration: number
+    self?: EvStoreStruct
 }
 type GraphNode_ev = {
     // 所属事件(事件值或自定义映射名)
-    group: EvCode | string
+    code: EvCode | string
     // 所处位置 "x y"
     loc: string
     // 矩形高度
     duration: number
-    // details?: {
-    //     evName: string
-    //     position: [ number, number ]
-    // }
+    // 原始数据 - 用于恢复、导出
+    self: EvStoreStruct
 }
 type GraphNode = GraphNode_head | GraphNode_ev
 // endregion
@@ -154,9 +154,10 @@ const createTimelineGraph = (elId: string, nodes: GraphNode[]) => {
 // endregion
 
 /**
- * @description 将 EvStoreStruct 数据转换成 Gojs 使用的 nodeDataArray
+ * @description 将 EvStoreStruct[] 转换成 nodeDataArray[]
  */
-const EvStore_to_GraphNode = (storeArray: EvStoreStruct[], mapper?: EvMap) => {
+const EvStore_to_GraphNode = (storeArray: EvStoreStruct[], mapper?: EvMapItem[]): GraphNode[] => {
+    const code_to_name = new EvMap(mapper)
     // 组的 x 位置
     const groupPos: {
         [k: string]: {
@@ -177,7 +178,7 @@ const EvStore_to_GraphNode = (storeArray: EvStoreStruct[], mapper?: EvMap) => {
         if(groupPos[item.code] === undefined) {
             label_array.push({
                 key: item.code,
-                text: mapper?.get(item.code) ?? item.code,
+                text: code_to_name?.get(item.code) ?? item.code,
                 isGroup: true,
                 loc: `${ next_group_x } ${ -STATIC_ARGS.LabelHeight }`,
                 duration: 0
@@ -195,9 +196,10 @@ const EvStore_to_GraphNode = (storeArray: EvStoreStruct[], mapper?: EvMap) => {
 
         // 将当前事件所对应的节点添加到列表中
         node_array.push({
-            group: item.code,
+            code: item.code,
             loc: `${ groupPos[item.code].x } ${ curr_t }`,
-            duration: item.duration ?? STATIC_ARGS.TimelineDashGap
+            duration: item.duration ?? STATIC_ARGS.TimelineDashGap,
+            self: item
         })
         groupPos[item.code].max = Math.max(groupPos[item.code].max, curr_t + (item.duration ?? 0))
     })
@@ -210,62 +212,78 @@ const EvStore_to_GraphNode = (storeArray: EvStoreStruct[], mapper?: EvMap) => {
     return [ ...label_array, ...node_array ]
 }
 
+/**
+ * @description 将 nodeDataArray[] 转换成 EvStoreStruct[]
+ */
+const GraphNode_to_EvStore = (graphNode: GraphNode[]): { storeArray: EvStoreStruct[], mapper?: EvMapItem[] } => {
+    const mapper: EvMapItem[] = []
+    const storeArray: EvStoreStruct[] = []
+
+    graphNode.forEach(node => {
+        if(node.self !== undefined) {
+            storeArray.push(node.self)
+        }
+        else if((<GraphNode_head>node).key !== (<GraphNode_head>node).text) {
+            mapper.push({ code: (<GraphNode_head>node).key, name: (<GraphNode_head>node).text })
+        }
+    })
+
+    return { storeArray, mapper }
+}
+
 class TimelineGraph {
     /**
-     * @description 绑定的 dom 容器
-     */
-    #elId: string
-    /**
-     * @description 事件自定名称映射表
-     */
-    #keyMap?: EvMap
-
-    /**
-     * @description diagram实例
+     * @description diagram 实例
      */
     #diagram: Diagram | null = null
 
-    constructor(elId: string, keyMap?: EvMap) {
-        this.#elId = elId
-        this.#keyMap = keyMap
-    }
-
-    fromObj(nodes: EvStoreStruct[]) {
+    fromObj(elId: string, obj: StorageStruct) {
         if(!!this.#diagram) {
             this.#diagram.clear()
             this.#diagram.div = null
         }
-        this.#diagram = createTimelineGraph(this.#elId, EvStore_to_GraphNode(nodes, this.#keyMap))
-        this.#diagram.zoomToFit()
-        console.log(EvStore_to_GraphNode(nodes, this.#keyMap))
+        this.#diagram = createTimelineGraph(elId, EvStore_to_GraphNode(obj.Toca.Action, obj.Toca.EvMap))
     }
 
-    toObj() {
-
+    fromXml(elId: string, xml: string) {
+        if(!!this.#diagram) {
+            this.#diagram.clear()
+            this.#diagram.div = null
+        }
+        this.fromObj(elId, xml2obj(xml))
     }
 
-    fromJson() {
+    toObj(): StorageStruct | null {
+        if(!this.#diagram) return null
+        else {
+            const { storeArray, mapper } = GraphNode_to_EvStore(<GraphNode[]>this.#diagram.model.nodeDataArray)
 
+            return {
+                Toca: {
+                    EvMap: mapper,
+                    Action: storeArray
+                }
+            }
+        }
     }
 
-    toJson() {
-
+    toXml(): string | null {
+        if(!this.#diagram) return null
+        else {
+            return obj2xml(<StorageStruct>this.toObj())
+        }
     }
 
-    fromXml() {
-
-    }
-
-    toXml() {
-
-    }
-
-    render() {
-
+    zoomToFit() {
+        this.#diagram?.zoomToFit()
     }
 
     dispose() {
-
+        if(!!this.#diagram) {
+            this.#diagram.clear()
+            this.#diagram.div = null
+            this.#diagram = null
+        }
     }
 }
 
