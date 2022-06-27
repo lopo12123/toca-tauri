@@ -1,41 +1,49 @@
 <script lang="ts" setup>
-import { makeTimelineGraph } from "@/scripts/useTimeline";
+import { createTimelineGraph, TimelineGraph } from "@/scripts/useTimeline";
 import { onMounted } from "vue";
+import { EvStoreStruct } from "@/scripts/useEv";
 
-const timeline_nodes = [
+const mock: EvStoreStruct[] = [
     {
-        key: 'a',
-        text: 'key A',
-        isGroup: true,
-        loc: '0 -30',
-        duration: 100
+        type: 'click',
+        code: 'A',
+        delay: 300,
     },
     {
-        key: 'b',
-        text: 'key B',
-        isGroup: true,
-        loc: '150 -30',
-        duration: 100
+        type: 'press',
+        code: 'B',
+        delay: 400,
+        duration: 300
     },
     {
-        group: 'a',
-        duration: 7,
-        loc: '0 0'
+        type: 'left',
+        code: 'MouseLeft',
+        delay: 300,
+        xy: [ 100, 100 ]
     },
     {
-        group: 'a',
-        duration: 17,
-        loc: '0 20'
+        type: 'right',
+        code: 'MouseDBLeft',
+        delay: 400,
+        xy: [ 200, 200 ]
     },
     {
-        group: 'b',
-        duration: 70,
-        loc: '150 0'
-    }
+        type: 'absolute',
+        code: 'MoveAbsolute',
+        delay: 300,
+        xy: [ 300, 300 ]
+    },
+    {
+        type: 'relative',
+        code: 'MoveRelative',
+        delay: 300,
+        xy: [ 400, 400 ]
+    },
 ]
 
 onMounted(() => {
-    const diagram = makeTimelineGraph('timeline-box', timeline_nodes)
+    const timeline = new TimelineGraph('timeline-box')
+    timeline.fromObj(mock)
 })
 </script>
 
@@ -46,6 +54,8 @@ onMounted(() => {
 </template>
 
 <style lang="scss" scoped>
+@use "src/styles/mixin";
+
 .root {
     position: relative;
     width: 100%;
@@ -55,9 +65,20 @@ onMounted(() => {
     justify-content: center;
 
     #timeline-box {
+        @include mixin.scrollBarStyle();
         width: 80%;
         height: 80%;
         border: solid 1px;
+        overflow: auto;
+
+        :deep(canvas) {
+            outline: none;
+        }
+
+        :deep(div) {
+            @include mixin.scrollBarStyle();
+            overflow: auto;
+        }
     }
 }
 </style>
