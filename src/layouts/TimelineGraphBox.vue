@@ -1,7 +1,8 @@
 <script lang="ts" setup>
 import { TimelineGraph } from "@/scripts/useTimeline";
-import { onBeforeUnmount, onMounted, PropType, shallowRef } from "vue";
-import { StorageStruct } from "@/scripts/useXml";
+import { onBeforeUnmount, onMounted, shallowRef } from "vue";
+import { StorageStruct, verify } from "@/scripts/useXml";
+import { ElMessage } from "element-plus";
 
 export type TimelineGraphSourceProp = { type: 'xml', data: string } | { type: 'obj', data: StorageStruct }
 
@@ -9,22 +10,37 @@ const { source } = defineProps<{
     source: TimelineGraphSourceProp
 }>()
 const emits = defineEmits<{
-    (ev: 'after-render', instance: TimelineGraph): void
+    (ev: 'after-render', instance: TimelineGraph | null): void
 }>()
 
 const diagramRef = shallowRef<TimelineGraph | null>(null)
 
 onMounted(() => {
-    diagramRef.value = new TimelineGraph()
+    const ifValid = verify(source)
 
-    try {
-        if(source.type === 'xml') diagramRef.value.fromXml('graph-el', source.data)
-        else diagramRef.value.fromObj('graph-el', source.data)
-    }catch (e) {
-        console.log(e)
+    if(!ifValid) {
+        ElMessage({
+            type: 'info',
+            message: '文件已被篡改!'
+        })
+        emits('after-render', null)
     }
+    else {
+        diagramRef.value = new TimelineGraph()
 
-    emits('after-render', diagramRef.value)
+        try {
+            if(source.type === 'xml') diagramRef.value.fromXml('graph-el', source.data)
+            else diagramRef.value.fromObj('graph-el', source.data)
+        }
+        catch (e) {
+            ElMessage({
+                type: 'info',
+                message: '渲染出错'
+            })
+        }
+
+        emits('after-render', diagramRef.value)
+    }
 })
 onBeforeUnmount(() => {
     diagramRef.value?.dispose()
