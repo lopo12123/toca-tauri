@@ -4,16 +4,22 @@
 
 @mixin scrollBarStyle($color: #aaa) {
     &::-webkit-scrollbar {
-        width: 6px!important;
-        height: 6px!important;
+        width: 6px !important;
+        height: 6px !important;
     }
     &::-webkit-scrollbar-thumb {
-        background-color: $color!important;
-        border-radius: 10px!important;
+        background-color: $color !important;
+        border-radius: 10px !important;
     }
     &::-webkit-scrollbar-track {
-        background-color: #00000000!important;
-        border-radius: 10px!important;
-        opacity: 0!important;
+        background-color: #00000000 !important;
+        border-radius: 10px !important;
+        opacity: 0 !important;
     }
+}
+
+@mixin textInLine {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 }
