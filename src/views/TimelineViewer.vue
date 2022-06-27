@@ -1,11 +1,11 @@
 <script lang="ts" setup>
-import { StorageStruct } from "@/scripts/useXml";
+import { StorageStruct, xml2obj } from "@/scripts/useXml";
 import TimelineGraphBox from "@/layouts/TimelineGraphBox.vue";
 import { TimelineGraph } from "@/scripts/useTimeline";
 import { onMounted, ref, shallowRef } from "vue";
 import { EvStoreStruct, EvCode, EvName } from "@/scripts/useEv";
 
-// region test
+// region todo 测试数据
 const mock_obj: StorageStruct = {
     Toca: {
         EvMap: [
@@ -55,6 +55,7 @@ const mock_obj: StorageStruct = {
 const mock_xml = '<Toca><EvMap><code>A</code><name>key A</name></EvMap><EvMap><code>B</code><name>key B</name></EvMap><Action><type>click</type><code>A</code><delay>300</delay></Action><Action><type>press</type><code>B</code><delay>400</delay><duration>300</duration></Action><Action><type>left</type><code>MouseLeft</code><delay>300</delay><xy>100</xy><xy>100</xy></Action><Action><type>right</type><code>MouseDBLeft</code><delay>400</delay><xy>200</xy><xy>200</xy></Action><Action><type>absolute</type><code>MoveAbsolute</code><delay>300</delay><xy>300</xy><xy>300</xy></Action><Action><type>relative</type><code>MoveRelative</code><delay>300</delay><xy>400</xy><xy>400</xy></Action><HASH>b4947a9840b4bf58168d1d93ed14a68f3ffe114e8686fa72f41524dc5bebcda3</HASH></Toca>'
 // endregion
 
+// region 列表展示 事件映射/事件序列
 const mapList = ref<{ [k: string]: string }>({})
 const evList = ref<EvStoreStruct[]>([])
 const getEvName = (code: EvCode) => {
@@ -65,13 +66,19 @@ const getEvDelay = (delay: number) => {
     else if(delay < 60_000) return `${ delay / 1000 }s`
     else return `${ (delay / 60_000).toFixed(1) }m`
 }
+// endregion
 
+// region 图像实例
 const instanceRef = shallowRef<TimelineGraph | null>(null)
 const afterRender = (instance: TimelineGraph | null) => {
     instanceRef.value = instance
 }
+// endregion
 
-// 加载 xml 内容到列表
+// region 加载 xml 内容到列表
+const loadXmlStr = (xmlStr: string) => {
+    loadXmlObj(xml2obj(xmlStr))
+}
 const loadXmlObj = (xmlObj: StorageStruct) => {
     const mapper: { [k: string]: string } = {}
     xmlObj.Toca.EvMap?.forEach(({ code, name }) => {
@@ -80,9 +87,16 @@ const loadXmlObj = (xmlObj: StorageStruct) => {
     mapList.value = mapper
     evList.value = xmlObj.Toca.Action
 }
+// endregion
+
+// todo 用户交互加载 xml 文件
+const userSelect = () => {
+    loadXmlStr(mock_xml)
+    instanceRef.value?.fromXml(mock_xml)
+}
 
 onMounted(() => {
-    loadXmlObj(mock_obj)
+    userSelect()
 })
 </script>
 
@@ -90,7 +104,14 @@ onMounted(() => {
     <div class="timeline-viewer">
         <div class="list-layout">
             <div class="mapper-list">
-
+                <div class="title-line">
+                    <div class="map-code">事件名</div>
+                    <div class="map-name">映射名</div>
+                </div>
+                <div class="item-line" v-for="(val, key) in mapList" :key="'mapper-'+key">
+                    <div class="map-code" :title="EvName[key]">{{ EvName[key] }}</div>
+                    <div class="map-name" :title="val">{{ val }}</div>
+                </div>
             </div>
             <div class="ev-list">
                 <div class="title-line">
@@ -101,7 +122,7 @@ onMounted(() => {
                     <div class="ev-db" title="是否双击">双击</div>
                     <div class="ev-duration" title="持续时间(按键事件)">持续</div>
                 </div>
-                <div class="item-line" v-for="(item, idx) in evList" :key="idx">
+                <div class="item-line" v-for="(item, idx) in evList" :key="'ev-'+idx">
                     <div class="ev-idx">{{ idx + 1 }}</div>
                     <div class="ev-delay" :title="getEvDelay(item.delay)">
                         {{ getEvDelay(item.delay) }}
@@ -118,9 +139,7 @@ onMounted(() => {
             </div>
         </div>
         <div class="graph-layout">
-            <TimelineGraphBox
-                :source="{type: 'xml', data: mock_xml}"
-                @after-render="afterRender"/>
+            <TimelineGraphBox @after-init="afterRender"/>
         </div>
     </div>
 </template>
@@ -149,16 +168,24 @@ onMounted(() => {
             @include mixin.scrollBarStyle();
             position: relative;
             width: 100%;
-            height: calc(40% - 1px);
+            height: calc(30% - 1px);
             border-bottom: solid 1px var(--separator-stroke);
             overflow: hidden auto;
+
+            .map-code {
+                width: 45%;
+            }
+
+            .map-name {
+                width: 45%;
+            }
         }
 
         .ev-list {
             @include mixin.scrollBarStyle();
             position: relative;
             width: 100%;
-            height: 60%;
+            height: 70%;
             font-size: 0.875rem;
             overflow: hidden auto;
 
