@@ -233,24 +233,33 @@ const GraphNode_to_EvStore = (graphNode: GraphNode[]): { storeArray: EvStoreStru
 
 class TimelineGraph {
     /**
+     * @description 容器id
+     */
+    readonly #elId: string
+
+    /**
      * @description diagram 实例
      */
     #diagram: Diagram | null = null
 
-    fromObj(elId: string, obj: StorageStruct) {
-        if(!!this.#diagram) {
-            this.#diagram.clear()
-            this.#diagram.div = null
-        }
-        this.#diagram = createTimelineGraph(elId, EvStore_to_GraphNode(obj.Toca.Action, obj.Toca.EvMap))
+    constructor(elId: string) {
+        this.#elId = elId
     }
 
-    fromXml(elId: string, xml: string) {
+    fromObj(obj: StorageStruct) {
         if(!!this.#diagram) {
             this.#diagram.clear()
             this.#diagram.div = null
         }
-        this.fromObj(elId, xml2obj(xml))
+        this.#diagram = createTimelineGraph(this.#elId, EvStore_to_GraphNode(obj.Toca.Action, obj.Toca.EvMap))
+    }
+
+    fromXml(xml: string) {
+        if(!!this.#diagram) {
+            this.#diagram.clear()
+            this.#diagram.div = null
+        }
+        this.fromObj(xml2obj(xml))
     }
 
     toObj(): StorageStruct | null {
