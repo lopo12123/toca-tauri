@@ -1,3 +1,19 @@
 @mixin pointer-hover {
     cursor: url("../assets/pointer-hover.png") 0 16, pointer;
 }
+
+@mixin scrollBarStyle($color: #aaa) {
+    &::-webkit-scrollbar {
+        width: 6px!important;
+        height: 6px!important;
+    }
+    &::-webkit-scrollbar-thumb {
+        background-color: $color!important;
+        border-radius: 10px!important;
+    }
+    &::-webkit-scrollbar-track {
+        background-color: #00000000!important;
+        border-radius: 10px!important;
+        opacity: 0!important;
+    }
+}
