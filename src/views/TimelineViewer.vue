@@ -1,9 +1,10 @@
 <script lang="ts" setup>
-import { StorageStruct, xml2obj } from "@/scripts/useXml";
+import { StorageStruct, verify_xml, xml2obj } from "@/scripts/useXml";
 import TimelineGraphBox from "@/layouts/TimelineGraphBox.vue";
 import { TimelineGraph } from "@/scripts/useTimeline";
 import { onMounted, ref, shallowRef } from "vue";
 import { EvStoreStruct, EvCode, EvName } from "@/scripts/useEv";
+import { ElMessage } from "element-plus";
 
 // region todo 测试数据
 const mock_obj: StorageStruct = {
@@ -89,19 +90,55 @@ const loadXmlObj = (xmlObj: StorageStruct) => {
 }
 // endregion
 
-// todo 用户交互加载 xml 文件
-const userSelect = () => {
-    loadXmlStr(mock_xml)
-    instanceRef.value?.fromXml(mock_xml)
+// region 交互选择并加载 xml 文件
+const iptRef = ref<HTMLInputElement | null>(null)
+const doUserSelect = () => {
+    const ipt = iptRef.value
+    if(!ipt) {
+        ElMessage({
+            type: 'info',
+            message: '发生内部错误, 请退出后重试'
+        })
+    }
+    else {
+        ipt.dispatchEvent(new MouseEvent('click'))
+        ipt.onchange = () => {
+            if(!ipt.files) {
+                ElMessage({
+                    type: 'info',
+                    message: '请选择文件'
+                })
+            }
+            else {
+                ElMessage({
+                    type: 'info',
+                    message: '解析中'
+                })
+                const reader = new FileReader()
+                reader.onload = () => {
+                    if(!verify_xml(reader.result as string)) {
+                        ElMessage({
+                            type: 'info',
+                            message: '文件已被篡改'
+                        })
+                    }
+                    else {
+                        loadXmlStr(reader.result as string)
+                        instanceRef.value?.fromXml(reader.result as string)
+                        ElMessage.closeAll()
+                    }
+                }
+                reader.readAsText(ipt.files[0])
+            }
+        }
+    }
 }
-
-onMounted(() => {
-    userSelect()
-})
+// endregion
 </script>
 
 <template>
     <div class="timeline-viewer">
+        <input class="hidden-file-selector" ref="iptRef" type="file" accept=".xml">
         <div class="list-layout">
             <div class="mapper-list">
                 <div class="title-line">
@@ -139,6 +176,10 @@ onMounted(() => {
             </div>
         </div>
         <div class="graph-layout">
+            <div class="select-file" @click="doUserSelect">
+                <i class="iconfont icon-record"/>
+                <span>载入配置文件</span>
+            </div>
             <TimelineGraphBox @after-init="afterRender"/>
         </div>
     </div>
@@ -155,9 +196,19 @@ onMounted(() => {
     align-items: center;
     justify-content: space-between;
 
+    .hidden-file-selector {
+        position: absolute;
+        z-index: -10;
+        width: 1rem;
+        height: 1rem;
+        left: -5rem;
+        top: -5rem;
+        opacity: 0;
+    }
+
     .list-layout {
         position: relative;
-        width: 320px;
+        width: 20rem;
         height: 100%;
         display: flex;
         flex-direction: column;
@@ -241,9 +292,30 @@ onMounted(() => {
 
     .graph-layout {
         position: relative;
-        width: calc(100% - 281px);
+        width: calc(100% - 20rem - 1px);
         height: 100%;
         border-left: solid 1px var(--separator-stroke);
+
+        .select-file {
+            @include mixin.pointer-hover;
+            position: absolute;
+            z-index: 10;
+            width: 6.25rem;
+            height: 1.5rem;
+            top: 4.375rem;
+            font-size: 0.75rem;
+            line-height: 1.5rem;
+            text-align: center;
+            user-select: none;
+            transform-origin: 0 0;
+            transform: rotate(-45deg);
+
+            &:hover {
+                span {
+                    text-decoration: underline;
+                }
+            }
+        }
     }
 }
 </style>
