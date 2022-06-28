@@ -3,7 +3,9 @@ import { useGlobal } from "@/stores/useGlobal";
 import { appWindow } from "@tauri-apps/api/window";
 import { open } from "@tauri-apps/api/shell";
 import { onBeforeUnmount, onMounted, ref } from "vue";
+import { useRouter } from "vue-router";
 
+const router = useRouter()
 const global = useGlobal()
 const tooltips = {
     theme: {
@@ -16,11 +18,14 @@ const tooltips = {
     }
 }
 
-type ToolItem = 'theme' | 'elder'
+type ToolItem = 'home' | 'theme' | 'elder'
     | 'bug' | 'issue' | 'min'
     | 'max' | 'refresh' | 'exit'
 const useTools = (type: ToolItem) => {
     switch(type) {
+        case "home":
+            router.push({ name: 'Home' })
+            break
         case "theme":
             global.toggleTheme()
             break
@@ -69,7 +74,6 @@ const useTools = (type: ToolItem) => {
                 })
             break
     }
-    console.log('执行: ', type)
 }
 
 const action_list = [ 'act-wushu', 'act-wushu1', 'act-wushu2', 'act-wushu3', 'act-wushu4', 'act-wushu5' ]
@@ -95,6 +99,15 @@ onBeforeUnmount(() => {
 
         <div class="tool-list-container" data-tauri-drag-region>
             <i class="separator-line"/>
+            <ElTooltip
+                placement="right"
+                content="首页"
+                :effect="global.theme === 'dark' ? 'light' : 'dark'">
+                <div class="btn-box" @click="useTools('home')">
+                    <i class="iconfont icon-home"/>
+                </div>
+            </ElTooltip>
+
             <ElTooltip
                 placement="right"
                 :content="tooltips.theme[global.theme]"
@@ -203,6 +216,15 @@ onBeforeUnmount(() => {
 
         i {
             font-size: 1.5rem;
+            animation: custom-fade-out 1s infinite;
+            @keyframes custom-fade-out {
+                0% {
+                    opacity: 1
+                }
+                100% {
+                    opacity: 0
+                }
+            }
         }
     }
 
