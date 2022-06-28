@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "1634068",
+      "name": "record",
+      "font_class": "record",
+      "unicode": "e606",
+      "unicode_decimal": 58886
+    },
+    {
       "icon_id": "1350461",
       "name": "sq-home",
       "font_class": "home",
