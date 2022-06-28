@@ -1,5 +1,8 @@
 @mixin pointer-hover {
     cursor: url("../assets/pointer-hover.png") 0 16, pointer;
+    * {
+        cursor: url("../assets/pointer-hover.png") 0 16, pointer;
+    }
 }
 
 @mixin scrollBarStyle($color: #aaa) {
