@@ -6,58 +6,8 @@ import { onMounted, ref, shallowRef } from "vue";
 import { EvStoreStruct, EvCode, EvName } from "@/scripts/useEv";
 import { ElMessage } from "element-plus";
 
-// region todo 测试数据
-const mock_obj: StorageStruct = {
-    Toca: {
-        EvMap: [
-            { code: 'A', name: 'key A' },
-            { code: 'B', name: 'key B' },
-        ],
-        Action: [
-            {
-                type: 'click',
-                code: 'A',
-                delay: 130_000,
-            },
-            {
-                type: 'press',
-                code: 'B',
-                delay: 400,
-                duration: 300
-            },
-            {
-                type: 'left',
-                code: 'MouseLeft',
-                delay: 300,
-                db: true,
-                xy: [ 100, 100 ]
-            },
-            {
-                type: 'right',
-                code: 'MouseDBLeft',
-                delay: 400,
-                xy: [ 1346, 2287 ]
-            },
-            {
-                type: 'absolute',
-                code: 'MoveAbsolute',
-                delay: 300,
-                xy: [ 300, 300 ]
-            },
-            {
-                type: 'relative',
-                code: 'MoveRelative',
-                delay: 300,
-                xy: [ 400, 400 ]
-            },
-        ]
-    }
-}
-const mock_xml = '<Toca><EvMap><code>A</code><name>key A</name></EvMap><EvMap><code>B</code><name>key B</name></EvMap><Action><type>click</type><code>A</code><delay>300</delay></Action><Action><type>press</type><code>B</code><delay>400</delay><duration>300</duration></Action><Action><type>left</type><code>MouseLeft</code><delay>300</delay><xy>100</xy><xy>100</xy></Action><Action><type>right</type><code>MouseDBLeft</code><delay>400</delay><xy>200</xy><xy>200</xy></Action><Action><type>absolute</type><code>MoveAbsolute</code><delay>300</delay><xy>300</xy><xy>300</xy></Action><Action><type>relative</type><code>MoveRelative</code><delay>300</delay><xy>400</xy><xy>400</xy></Action><HASH>b4947a9840b4bf58168d1d93ed14a68f3ffe114e8686fa72f41524dc5bebcda3</HASH></Toca>'
-// endregion
-
 // region 列表展示 事件映射/事件序列
-const mapList = ref<{ [k: string]: string }>({})
+const mapList = ref<Partial<{ [k in EvCode]: string }>>({})
 const evList = ref<EvStoreStruct[]>([])
 const getEvName = (code: EvCode) => {
     return mapList.value[code] ?? EvName[code]
@@ -167,9 +117,9 @@ const doUserSelect = () => {
                     <div class="ev-name" :title="getEvName(item.code)">
                         {{ getEvName(item.code) }}
                     </div>
-                    <div class="ev-pos" :title="item.xy">{{ item.xy?.join(',') ?? '-' }}</div>
+                    <div class="ev-pos" :title="item.xy?.join(',') ?? ''">{{ item.xy?.join(',') ?? '-' }}</div>
                     <div class="ev-db">{{ item.db ? '√' : '-' }}</div>
-                    <div class="ev-duration" :title="item.duration ?? '无持续时间'">
+                    <div class="ev-duration" :title="(item.duration ?? '无持续时间') + ''">
                         {{ item.duration ?? '-' }}
                     </div>
                 </div>
