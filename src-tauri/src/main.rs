@@ -4,18 +4,23 @@ windows_subsystem = "windows"
 )]
 
 mod toca;
+mod capture;
 
-use tauri::{Builder, generate_context};
+// use tauri::{Builder, generate_context};
 
 fn main() {
-    Builder::default()
-        // ipc 命令
-        // .invoke_handler(generate_handler![])
+    // Builder::default()
+    //     // ipc 命令
+    //     // .invoke_handler(generate_handler![])
+    //
+    //     // 创建一个空的菜单列表则菜单自动隐藏
+    //     .menu(tauri::Menu::with_items(vec![]))
+    //
+    //     // 运行 tauri.conf.json 配置信息
+    //     .run(generate_context!())
+    //     .expect("error while running tauri application");
 
-        // 创建一个空的菜单列表则菜单自动隐藏
-        .menu(tauri::Menu::with_items(vec![]))
+    println!("screen size is: {:?}", capture::get_screen_size());
 
-        // 运行 tauri.conf.json 配置信息
-        .run(generate_context!())
-        .expect("error while running tauri application");
+    capture::do_key_record();
 }
