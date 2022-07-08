@@ -3,7 +3,7 @@ all(not(debug_assertions), target_os = "windows"),
 windows_subsystem = "windows"
 )]
 
-mod record_work;
+mod toca_commands;
 
 // use tauri::{Builder, generate_context};
 
