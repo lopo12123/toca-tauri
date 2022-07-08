@@ -1,5 +1,5 @@
 //! 将 `toca` 方法封装成 `tauri` 指令, 供 `Js` 直接调用
-use toca::{KeyboardAction, KeyboardMapper, KeyboardPlayer, KeyboardRecorder, Keycode, MouseAction, MousePlayer, MouseRecorder};
+use toca::{KeyboardAction, KeyboardMapper, KeyboardPlayer, KeyboardRecorder, MouseAction, MousePlayer, MouseRecorder};
 
 // region keyboard
 /// 标记为 Rust 命令, 可通过 Js 直接调用
