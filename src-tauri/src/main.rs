@@ -3,8 +3,7 @@ all(not(debug_assertions), target_os = "windows"),
 windows_subsystem = "windows"
 )]
 
-mod toca;
-mod capture;
+mod record_work;
 
 // use tauri::{Builder, generate_context};
 
@@ -19,8 +18,4 @@ fn main() {
     //     // 运行 tauri.conf.json 配置信息
     //     .run(generate_context!())
     //     .expect("error while running tauri application");
-
-    println!("screen size is: {:?}", capture::get_screen_size());
-
-    capture::do_key_record();
 }
