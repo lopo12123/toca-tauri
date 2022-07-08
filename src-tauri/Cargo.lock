@@ -3040,12 +3040,14 @@ checksum = "cda74da7e1a664f795bb1f8a87ec406fb89a02522cf6e50620d016add6dbbf5c"
 
 [[package]]
 name = "toca"
-version = "0.1.0"
+version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8fffb4fcc8b65565b6f596f9e18be85f7818b3df46e08fc3d2757c6006fa77b0"
+checksum = "807a87fe6012f7e7c69605cc2ce050dcc5d1e90a45c10fe4ca2c409c862ee21e"
 dependencies = [
  "device_query",
  "enigo",
+ "serde",
+ "serde_json",
 ]
 
 [[package]]
