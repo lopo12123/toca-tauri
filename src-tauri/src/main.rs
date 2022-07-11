@@ -10,9 +10,12 @@ use toca_commands::{record_keyboard, record_mouse, display_keyboard, display_mou
 
 fn main() {
     Builder::default()
-        // ipc 命令
+        // ipc 命令 - javascript 端使用 invoke(cmd, args) 调用
         .invoke_handler(generate_handler![
             record_keyboard,
+            record_mouse,
+            display_keyboard,
+            display_mouse
         ])
 
         // 创建一个空的菜单列表则菜单自动隐藏
