@@ -13,10 +13,6 @@ const selectOption = (type: 'display' | 'record') => {
     }
     else if(type === 'record') {
         router.push({ name: 'RecordView' })
-        // ElMessage({
-        //     type: 'info',
-        //     message: '暂未实现'
-        // })
     }
 }
 </script>

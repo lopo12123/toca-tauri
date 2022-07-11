@@ -10,6 +10,11 @@ const routes: RouteRecordRaw[] = [
         path: '/record-view',
         name: 'RecordView',
         component: () => import("@/views/RecordView.vue")
+    },
+    {
+        path: '/display-view',
+        name: 'DisplayView',
+        component: () => import("@/views/DisplayView.vue")
     }
 ]
 
