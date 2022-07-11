@@ -1,11 +1,6 @@
 * {
     margin: 0;
     padding: 0;
-    cursor: url("../assets/pointer-default.png") 0 16, auto;
-
-    &:active {
-        cursor: url("../assets/pointer-click.png") 0 16, auto;
-    }
 }
 
 html, body {
