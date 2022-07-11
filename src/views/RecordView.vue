@@ -41,8 +41,11 @@ const doRecord = (type: 'keyboard' | 'mouse') => {
 <template>
     <div class="record-view" data-tauri-drag-region>
         <div>
+            <span :style="`color: red`">pending状态下不要进行当前窗口操作</span> <br>
             <span>使用 ESC 键停止录制</span> <br>
-            <span>当前状态: {{ record_status }}</span>
+            <span>当前状态: <span :style="`color: ${record_status === 'pending' ? 'red' : '#ccc'}`">{{
+                    record_status
+                }}</span></span>
         </div>
         <button @click="doRecord('keyboard')">键盘</button>
         <button @click="doRecord('mouse')">鼠标</button>
@@ -56,5 +59,6 @@ const doRecord = (type: 'keyboard' | 'mouse') => {
     position: relative;
     width: 100%;
     height: 100%;
+    background-color: var(--background);
 }
 </style>

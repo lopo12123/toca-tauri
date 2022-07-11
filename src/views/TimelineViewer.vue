@@ -247,7 +247,6 @@ const doUserSelect = () => {
         border-left: solid 1px var(--separator-stroke);
 
         .select-file {
-            @include mixin.pointer-hover;
             position: absolute;
             z-index: 10;
             width: 6.25rem;

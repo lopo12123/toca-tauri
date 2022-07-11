@@ -1,12 +1,10 @@
 <script lang="ts" setup>
-import { useGlobal } from "@/stores/useGlobal";
 import { appWindow } from "@tauri-apps/api/window";
 import { open } from "@tauri-apps/api/shell";
 import { onBeforeUnmount, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 
 const router = useRouter()
-const global = useGlobal()
 const tooltips = {
     theme: {
         light: '使用夜间模式',
@@ -27,10 +25,8 @@ const useTools = (type: ToolItem) => {
             router.push({ name: 'Home' })
             break
         case "theme":
-            global.toggleTheme()
             break
         case "elder":
-            global.toggleElderMode()
             break
         case "bug":
             open('https://github.com/lopo12123/toca-tauri/issues')
@@ -90,102 +86,8 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <div class="app-banner"
-         data-tauri-drag-region
-         @dblclick="useTools('max')">
-        <div class="logo-container" data-tauri-drag-region>
-            <i :class="['actor_play', action_list[action_idx]]"/>
-        </div>
-
-        <div class="tool-list-container" data-tauri-drag-region>
-            <i class="separator-line"/>
-            <ElTooltip
-                placement="right"
-                content="首页"
-                :effect="global.theme === 'dark' ? 'light' : 'dark'">
-                <div class="btn-box" @click="useTools('home')">
-                    <i class="iconfont icon-home"/>
-                </div>
-            </ElTooltip>
-
-            <ElTooltip
-                placement="right"
-                :content="tooltips.theme[global.theme]"
-                :effect="global.theme === 'dark' ? 'light' : 'dark'">
-                <div class="btn-box" @click="useTools('theme')">
-                    <i class="iconfont icon-moonyueliang" v-if="global.theme === 'light'"/>
-                    <i class="iconfont icon-sun" v-if="global.theme === 'dark'"/>
-                </div>
-            </ElTooltip>
-
-            <ElTooltip
-                placement="right"
-                :content="tooltips.elder[global.elderMode]"
-                :effect="global.theme === 'dark' ? 'light' : 'dark'">
-                <div :class="['btn-box', global.elderMode === 'enable' ? 'btn-box__selected' : '']"
-                     @click="useTools('elder')">
-                    <i class="iconfont icon-grandpa"/>
-                </div>
-            </ElTooltip>
-
-            <ElTooltip
-                placement="right"
-                content="Bug反馈"
-                :effect="global.theme === 'dark' ? 'light' : 'dark'">
-                <div class="btn-box" @click="useTools('bug')">
-                    <i class="iconfont icon-bug"/>
-                </div>
-            </ElTooltip>
-
-            <ElTooltip
-                placement="right"
-                content="建议/意见"
-                :effect="global.theme === 'dark' ? 'light' : 'dark'">
-                <div class="btn-box" @click="useTools('issue')">
-                    <i class="iconfont icon-fankuiyijian"/>
-                </div>
-            </ElTooltip>
-        </div>
-
-        <div class="sys-list-container" data-tauri-drag-region>
-            <i class="separator-line"/>
-
-            <ElTooltip
-                placement="right"
-                content="最小化"
-                :effect="global.theme === 'dark' ? 'light' : 'dark'">
-                <div class="btn-box" @click="useTools('min')">
-                    <i class="iconfont icon-zuoxiajiao-"/>
-                </div>
-            </ElTooltip>
-
-            <ElTooltip
-                placement="right"
-                content="最大化"
-                :effect="global.theme === 'dark' ? 'light' : 'dark'">
-                <div class="btn-box" @click="useTools('max')">
-                    <i class="iconfont icon-fangda1"/>
-                </div>
-            </ElTooltip>
-
-            <ElTooltip
-                placement="right"
-                content="重新载入"
-                :effect="global.theme === 'dark' ? 'light' : 'dark'">
-                <div class="btn-box" @click="useTools('refresh')">
-                    <i class="iconfont icon-shuaxin"/>
-                </div>
-            </ElTooltip>
-
-            <ElTooltip
-                placement="right"
-                content="退出"
-                :effect="global.theme === 'dark' ? 'light' : 'dark'">
-                <div class="btn-box" @click="useTools('exit')">
-                    <i class="iconfont icon-qp_icon_exit"/>
-                </div>
-            </ElTooltip>
-        </div>
+    <div class="app-banner">
+        empty here.
     </div>
 </template>
 
@@ -249,7 +151,6 @@ onBeforeUnmount(() => {
     }
 
     .btn-box {
-        @include mixin.pointer-hover;
         position: relative;
         width: 1.5rem;
         height: 1.5rem;
