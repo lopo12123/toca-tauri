@@ -56,7 +56,7 @@ const useTools = (type: ToolItem) => {
                         : appWindow.maximize()
                 })
                 .catch(err => {
-
+                    console.log('最大化出错')
                 })
             break
         case "refresh":
