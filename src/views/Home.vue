@@ -5,13 +5,18 @@ import { ElMessage } from "element-plus";
 const router = useRouter()
 const selectOption = (type: 'display' | 'record') => {
     if(type === 'display') {
-        router.push({ name: 'TimelineViewer' })
-    }
-    else if(type === 'record') {
+        // router.push({ name: 'TimelineViewer' })
         ElMessage({
             type: 'info',
             message: '暂未实现'
         })
+    }
+    else if(type === 'record') {
+        router.push({ name: 'RecordView' })
+        // ElMessage({
+        //     type: 'info',
+        //     message: '暂未实现'
+        // })
     }
 }
 </script>
@@ -35,13 +40,18 @@ const selectOption = (type: 'display' | 'record') => {
     justify-content: center;
 
     .option-btn {
-        @include mixin.pointer-hover;
         width: 5rem;
         height: 3rem;
-        border: solid 1px var(--separator-stroke);
+        //border: solid 1px var(--separator-stroke);
+        //user-select: none;
+        cursor: pointer;
         display: flex;
         align-items: center;
         justify-content: center;
+
+        &:hover {
+            text-decoration: underline;
+        }
     }
 }
 </style>
