@@ -57,9 +57,10 @@
                 "decorations": false,
                 "width": 200,
                 "minWidth": 200,
-                "height": 150,
-                "minHeight": 150,
+                "height": 100,
+                "minHeight": 100,
                 "resizable": true,
+                "transparent": true,
                 "fullscreen": false,
                 "fileDropEnabled": false
             }
