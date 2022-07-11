@@ -1,17 +1,17 @@
 <script lang="ts" setup>
-// const record_status = ref<string>('waiting')
-// const doKeyRecord = () => {
-//     record_status.value = 'recording'
-//     invoke('record_keyboard', { signal: 'Escape' })
-//         .then((res: any) => {
-//             record_status.value = 'done'
-//             console.log(res)
-//         })
-//         .catch((err: any) => {
-//             record_status.value = 'error'
-//             console.log(err)
-//         })
-// }
+import { onMounted } from "vue";
+
+// 阻止右键响应
+onMounted(() => {
+    window.oncontextmenu = (e) => {
+        e.preventDefault()
+        e.stopPropagation()
+    }
+    document.oncontextmenu = (e) => {
+        e.preventDefault()
+        e.stopPropagation()
+    }
+})
 </script>
 
 <template>
