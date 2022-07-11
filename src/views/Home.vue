@@ -5,11 +5,7 @@ import { ElMessage } from "element-plus";
 const router = useRouter()
 const selectOption = (type: 'display' | 'record') => {
     if(type === 'display') {
-        // router.push({ name: 'TimelineViewer' })
-        ElMessage({
-            type: 'info',
-            message: '暂未实现'
-        })
+        router.push({ name: 'DisplayView' })
     }
     else if(type === 'record') {
         router.push({ name: 'RecordView' })
