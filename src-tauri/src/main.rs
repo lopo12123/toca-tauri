@@ -19,7 +19,7 @@ fn main() {
         ])
 
         // 创建一个空的菜单列表则菜单自动隐藏
-        .menu(tauri::Menu::with_items(vec![]))
+        // .menu(tauri::Menu::with_items(vec![]))
 
         // 运行 tauri.conf.json 配置信息
         .run(generate_context!())
