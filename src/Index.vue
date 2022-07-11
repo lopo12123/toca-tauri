@@ -23,10 +23,13 @@
 <style lang="scss" scoped>
 .index {
     position: relative;
-    width: calc(100vw - 2px);
-    height: calc(100vh - 2px);
-    border: solid 1px var(--separator-stroke);
+    width: calc(100vw - 4px);
+    max-width: calc(100vw - 4px);
+    height: calc(100vh - 4px);
+    max-height: calc(100vh - 4px);
+    border: solid 2px var(--separator-stroke);
     color: var(--text-color);
+    overflow: auto;
     display: flex;
     align-items: center;
     justify-content: center;
