@@ -1,18 +1,38 @@
 <script lang="ts" setup>
 import AppBanner from "@/layouts/AppBanner.vue";
 import { useGlobal } from "@/stores/useGlobal";
+import { invoke } from "@tauri-apps/api";
+import { ref } from "vue";
 
 const global = useGlobal()
+
+const record_status = ref<string>('wating')
+const doKeyRecord = () => {
+    record_status.value = 'recording'
+    invoke('record_keyboard', { signal: 'Escape' })
+        .then((res: any) => {
+            record_status.value = 'done'
+            console.log(res)
+        })
+        .catch((err: any) => {
+            record_status.value = 'error'
+            console.log(err)
+        })
+}
 </script>
 
 <template>
     <div :class="['index', global.theme]">
-        <div class="app-banner-container">
-            <AppBanner/>
+        <div class="status">
+            status: <span>{{ record_status }}</span>
         </div>
-        <div class="app-view-container">
-            <router-view/>
-        </div>
+        <!--        <div class="app-banner-container">-->
+        <!--            <AppBanner/>-->
+        <!--        </div>-->
+        <!--        <div class="app-view-container">-->
+        <!--            <router-view/>-->
+        <!--        </div>-->
+        <button @click="doKeyRecord">record keys</button>
     </div>
 </template>
 
