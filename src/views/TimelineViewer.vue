@@ -232,7 +232,7 @@ const doUserSelect = () => {
             @extend %line-base;
             height: 1.5rem;
             line-height: 1.5rem;
-            background-color: var(--list-title-background);
+            background-color: #aaa;
         }
 
         .item-line {

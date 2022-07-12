@@ -160,13 +160,11 @@ onBeforeUnmount(() => {
 
         &:hover {
             outline: solid 1px var(--separator-stroke);
-            background-color: var(--background-hover);
         }
     }
 
     .btn-box__selected {
         outline: solid 1px var(--separator-stroke);
-        background-color: var(--background-hover);
     }
 
     .separator-line {
