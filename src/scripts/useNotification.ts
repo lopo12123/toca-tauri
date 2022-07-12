@@ -4,7 +4,7 @@
  * @param title 标题 默认为 Toca
  */
 const useNotification = (msg: string, title: string = 'Toca') => {
-    return new Promise<'success' | 'refuse' | 'err'>((resolve, reject) => {
+    return new Promise<'success' | 'refuse' | 'err'>((resolve) => {
         Notification.requestPermission()
             .then(res => {
                 if(res === 'granted') {
