@@ -6,7 +6,7 @@ export default defineStore({
         return {
             alwaysOnTop: JSON.parse(localStorage.getItem('alwaysOnTop') ?? 'false') as boolean,
             globalAlpha: JSON.parse(localStorage.getItem('globalAlpha') ?? '1'),
-            scrollMessage: 'qweqweqweqweqweqweqeqqweqweqweqweqweqweqeqqweqweqweqweqweqweqeq'
+            scrollMessage: ''
         }
     },
     actions: {
