@@ -72,7 +72,7 @@ const xml2obj = (xml_str: string, action_type: 'keyboard' | 'mouse', verify: boo
 
 const download_xml = (xml: string, action_type: 'keyboard' | 'mouse') => {
     const anchor = document.createElement('a')
-    anchor.download = `${ action_type }_${ Date.now() }.toca`
+    anchor.download = `${ action_type }_action_${ Date.now() }.toca`
     anchor.href = 'data:text/plain;charset=utf-8,' + xml
     anchor.click()
 }
