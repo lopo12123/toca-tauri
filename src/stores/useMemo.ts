@@ -7,7 +7,7 @@ export default defineStore({
             alwaysOnTop: JSON.parse(localStorage.getItem('alwaysOnTop') ?? 'false') as boolean,
             globalAlpha: JSON.parse(localStorage.getItem('globalAlpha') ?? '1'),
             scrollMessage: '',
-            signalKeyCode: 'Escape'
+            signalKeyCode: localStorage.getItem('signalKeyCode') ?? 'Escape',
         }
     },
     actions: {
@@ -32,7 +32,7 @@ export default defineStore({
             if(code === this.signalKeyCode) return;
 
             this.signalKeyCode = code
-            localStorage.setItem('signalKeyCode', JSON.stringify(this.signalKeyCode))
-        }
+            localStorage.setItem('signalKeyCode', this.signalKeyCode)
+        },
     }
 })
