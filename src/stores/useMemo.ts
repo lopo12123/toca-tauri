@@ -6,7 +6,8 @@ export default defineStore({
         return {
             alwaysOnTop: JSON.parse(localStorage.getItem('alwaysOnTop') ?? 'false') as boolean,
             globalAlpha: JSON.parse(localStorage.getItem('globalAlpha') ?? '1'),
-            scrollMessage: ''
+            scrollMessage: '',
+            signalKeyCode: 'Escape'
         }
     },
     actions: {
@@ -16,7 +17,8 @@ export default defineStore({
         },
         updateGlobalAlpha(val: number) {
             if(val == this.globalAlpha) return;
-            else if(val >= 1) this.globalAlpha = 1
+
+            if(val >= 1) this.globalAlpha = 1
             else if(val <= 0.1) this.globalAlpha = 0.1
             else this.globalAlpha = val
 
@@ -25,6 +27,12 @@ export default defineStore({
         },
         setScrollMessage(msg: string) {
             this.scrollMessage = msg
+        },
+        updateSignalKeyCode(code: string) {
+            if(code === this.signalKeyCode) return;
+
+            this.signalKeyCode = code
+            localStorage.setItem('signalKeyCode', JSON.stringify(this.signalKeyCode))
         }
     }
 })
