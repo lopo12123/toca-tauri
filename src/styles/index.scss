@@ -21,7 +21,11 @@ img {
 
 .el-slider {
     .el-slider__bar {
-        background-color: var(--scroll-bar-color);
+        background-color: var(--background-color__dark);
+    }
+
+    .el-slider__runway {
+        background-color: var(--background-color__dark);
     }
 
     .el-slider__button-wrapper {
@@ -30,9 +34,5 @@ img {
             height: 10px;
             border: solid 2px var(--separator-stroke);
         }
-    }
-
-    .el-slider__runway {
-        background-color: transparent;
     }
 }

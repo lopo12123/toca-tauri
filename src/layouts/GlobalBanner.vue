@@ -8,7 +8,7 @@ import useMemo from "@/stores/useMemo";
 const configMemo = useMemo()
 
 // 需要绑定一个 v-model 才能使用
-const _slider_value_receiver = ref(1)
+const _slider_value_receiver = ref(configMemo.globalAlpha)
 
 // 透明度调整条是否可见
 const opacityAdjusterVisible = ref(false)
