@@ -26,3 +26,21 @@ html, body {
 img {
     -webkit-user-drag: none;
 }
+
+.el-slider {
+    .el-slider__bar {
+        background-color: var(--scroll-bar-color);
+    }
+
+    .el-slider__button-wrapper {
+        .el-slider__button {
+            width: 10px;
+            height: 10px;
+            border: solid 2px var(--border-color);
+        }
+    }
+
+    .el-slider__runway {
+        background-color: transparent;
+    }
+}
