@@ -42,6 +42,7 @@ onMounted(() => {
     width: 300px;
     height: 100px;
     border: solid 2px var(--border-color);
+    border-radius: 5px;
     background-color: var(--background-color);
     color: var(--text-color);
     display: flex;
