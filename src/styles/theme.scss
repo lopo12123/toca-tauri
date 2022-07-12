@@ -1,14 +1,13 @@
 .global {
-    --background: #eee;
-    --background-hover: #ccc;
+    --border-color: #333;
+    --background-color: #eee;
     --text-color: #555;
     --separator-stroke: #777;
-    --list-title-background: #aaa;
+    --scroll-bar-color: #ccc;
 }
 
 //.light {
 //    --background: #eee;
-//    --background-hover: #ccc;
 //    --text-color: #555;
 //    --separator-stroke: #777;
 //    --list-title-background: #aaa;
@@ -16,7 +15,6 @@
 
 //.dark {
 //    --background: #333;
-//    --background-hover: #777;
 //    --text-color: #ccc;
 //    --separator-stroke: #aaa;
 //    --list-title-background: #555;
