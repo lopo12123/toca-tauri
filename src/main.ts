@@ -4,6 +4,7 @@ import "@/actors/iconfont.css";
 import "@/fonts/iconfont.css";
 import "@/styles/theme.scss";
 import "@/styles/index.scss";
+import "@/fonts/fonts.scss";
 
 // core
 import { createApp } from "vue";
