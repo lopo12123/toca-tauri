@@ -44,14 +44,8 @@ const output = () => {
     else {
         const xml_str = obj2xml(JSON.parse(record_string.value), record_type.value)
 
-        if(xml_str === null) {
-            useNotification('事件记录解析出错')
-        }
-        else {
-            console.log('录制结果字符串: ', xml_str)
-
-            download_xml(xml_str, record_type.value)
-        }
+        if(xml_str === null) useNotification('事件记录解析出错')
+        else download_xml(xml_str, record_type.value)
     }
 }
 // endregion
