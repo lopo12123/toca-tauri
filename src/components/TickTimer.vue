@@ -99,16 +99,16 @@ onBeforeUnmount(() => {
         animation: tick-tick 1s infinite;
         @keyframes tick-tick {
             0% {
-                opacity: 0;
+                opacity: 1;
             }
             50% {
-                opacity: 0;
+                opacity: 1;
             }
             51% {
-                opacity: 1;
+                opacity: 0;
             }
             100% {
-                opacity: 1;
+                opacity: 0;
             }
         }
     }
