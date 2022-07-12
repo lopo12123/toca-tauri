@@ -31,7 +31,9 @@ const back = () => {
 // endregion
 
 // region 导出
+// 结果保存为字符串
 const record_string = ref('')
+// 导出为文件
 const output = () => {
     if(record_string.value === '') {
         useNotification('暂无录制记录')
@@ -62,12 +64,14 @@ const record_keyboard = () => {
     configMemo.setScrollMessage('录制中...')
     invoke<string>('record_keyboard', { signal: configMemo.signalKeyCode })
         .then(res => {
-            timerHandle.value.stop()
             record_string.value = res
+            timerHandle.value.stop()
+            configMemo.setScrollMessage('')
             useNotification('录制结束, 使用导出按钮保存记录')
         })
         .catch(err => {
             timerHandle.value.stop()
+            configMemo.setScrollMessage('')
             useNotification('录制键盘行为出错')
         })
 }
@@ -78,14 +82,17 @@ const record_mouse = () => {
 
     // 启动录制: 阻塞线程
     timerHandle.value.start()
+    configMemo.setScrollMessage('录制中...')
     invoke<string>('record_mouse', { signal: configMemo.signalKeyCode })
         .then(res => {
-            timerHandle.value.stop()
             record_string.value = res
+            timerHandle.value.stop()
+            configMemo.setScrollMessage('')
             useNotification('录制结束, 使用导出按钮保存记录')
         })
         .catch(err => {
             timerHandle.value.stop()
+            configMemo.setScrollMessage('')
             useNotification('录制鼠标行为出错')
         })
 }
