@@ -83,13 +83,13 @@ onBeforeUnmount(() => {
 <style lang="scss" scoped>
 .tick-timer {
     position: relative;
-    width: 100%;
-    height: 100%;
-    font-size: 2rem;
+    width: 6rem;
+    height: 2rem;
+    font-size: 1.5rem;
     font-family: UniDream-LED;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
 
     .ticker {
         margin: 0 1px;
