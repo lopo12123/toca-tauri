@@ -15,6 +15,14 @@ onMounted(() => {
         e.preventDefault()
         e.stopPropagation()
     }
+    // window.onkeydown = (e) => {
+    //     e.preventDefault()
+    //     e.stopPropagation()
+    // }
+    // document.onkeydown = (e) => {
+    //     e.preventDefault()
+    //     e.stopPropagation()
+    // }
 })
 </script>
 
@@ -35,12 +43,12 @@ onMounted(() => {
 .index {
     @include mixin.scrollBarStyle(var(--scroll-bar-color));
     position: relative;
-    //width: calc(100vw - 4px);
-    //max-width: calc(100vw - 4px);
-    //height: calc(100vh - 4px);
-    //max-height: calc(100vh - 4px);
-    width: 300px;
-    height: 100px;
+    width: calc(100vw - 4px);
+    max-width: calc(100vw - 4px);
+    height: calc(100vh - 4px);
+    max-height: calc(100vh - 4px);
+    //width: 300px;
+    //height: 100px;
     border: solid 2px var(--border-color);
     border-radius: 5px;
     background-color: var(--background-color);
