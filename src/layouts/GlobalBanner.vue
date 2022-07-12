@@ -120,6 +120,7 @@ onMounted(() => {
 
             .inner-text {
                 @include mixin.textInLine;
+                font-size: 0.875rem;
             }
         }
 
