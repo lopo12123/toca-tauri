@@ -15,8 +15,10 @@ export default defineStore({
             this.alwaysOnTop = !this.alwaysOnTop
             localStorage.setItem('alwaysOnTop', JSON.stringify(this.alwaysOnTop))
         },
-        updateGlobalAlpha(val: number) {
-            if(val == this.globalAlpha) return;
+        updateGlobalAlpha(val: number | number[]) {
+            const _val = typeof val === 'number' ? val : val?.[0]
+
+            if(val == this.globalAlpha || !_val) return;
 
             if(val >= 1) this.globalAlpha = 1
             else if(val <= 0.1) this.globalAlpha = 0.1
