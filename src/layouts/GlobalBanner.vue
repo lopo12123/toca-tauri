@@ -151,7 +151,6 @@ onMounted(() => {
             position: relative;
             width: 1rem;
             height: 1rem;
-            border-radius: 2px;
             text-align: center;
             line-height: 1rem;
             cursor: pointer;
