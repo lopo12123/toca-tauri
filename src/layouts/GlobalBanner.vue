@@ -61,7 +61,8 @@ onMounted(() => {
          data-tauri-drag-region>
         <div class="auto-switch-box"
              data-tauri-drag-region>
-            <div class="scroll-message-box" :style="`width: ${opacityAdjusterVisible ? '0%' : '100%'}`">
+            <div class="scroll-message-box" data-tauri-drag-region
+                 :style="`width: ${opacityAdjusterVisible ? '0%' : '100%'}`">
                 <div class="inner-text">{{ configMemo.scrollMessage }}</div>
             </div>
             <div class="opacity-adjuster" :style="`width: ${opacityAdjusterVisible ? '100%' : '0%'}`">
