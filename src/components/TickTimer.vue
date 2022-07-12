@@ -17,12 +17,19 @@ const dot_sec = ref(0)
 
 const isTiming = ref(false)
 const timerId = ref<any>(-1)
-const startTick = () => {
-    // 重置
-    hour.value = 0
-    min.value = 0
-    sec.value = 0
-    dot_sec.value = 0
+const startTick = (initial_ms: number, to: 'increase' | 'decrease') => {
+    // 初始化
+    // 1h = 60 * 60 * 1_000 ms
+    hour.value = Math.floor(initial_ms / 3_600_000)
+    initial_ms %= 3_600_000
+    // 1min = 60 * 1_000 ms
+    min.value = Math.floor(initial_ms / 60_000)
+    initial_ms %= 60_000
+    // 1sec = 1_000 ms
+    sec.value = Math.floor(initial_ms / 1_000)
+    initial_ms %= 1_000
+    // 0.1sec = 100 ms
+    dot_sec.value = Math.floor(initial_ms / 100)
 
     timerId.value = setInterval(() => {
         if(dot_sec.value < 9) dot_sec.value += 1
