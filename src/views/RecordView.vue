@@ -6,6 +6,7 @@ import useMemo from "@/stores/useMemo";
 import { useRouter } from "vue-router";
 import { ValidSignalKey } from "@/scripts/useMapper";
 import { useNotification } from "@/scripts/useNotification";
+import { download_xml, obj2xml } from "@/scripts/useXml";
 
 const configMemo = useMemo()
 
@@ -31,15 +32,26 @@ const back = () => {
 // endregion
 
 // region 导出
+// 录制类型
+const record_type = ref<'keyboard' | 'mouse'>('keyboard')
 // 结果保存为字符串
 const record_string = ref('')
 // 导出为文件
 const output = () => {
     if(record_string.value === '') {
-        useNotification('暂无录制记录')
+        useNotification('暂无记录, 请先进行录制')
     }
     else {
-        console.log('录制结果字符串: ', record_string.value)
+        const xml_str = obj2xml(JSON.parse(record_string.value), record_type.value)
+
+        if(xml_str === null) {
+            useNotification('事件记录解析出错')
+        }
+        else {
+            console.log('录制结果字符串: ', xml_str)
+
+            download_xml(xml_str, record_type.value)
+        }
     }
 }
 // endregion
@@ -60,6 +72,7 @@ const record_keyboard = () => {
     record_string.value = ''
 
     // 启动录制: 阻塞线程
+    record_type.value = 'keyboard'
     timerHandle.value.start()
     configMemo.setScrollMessage('录制中...')
     invoke<string>('record_keyboard', { signal: configMemo.signalKeyCode })
@@ -81,6 +94,7 @@ const record_mouse = () => {
     record_string.value = ''
 
     // 启动录制: 阻塞线程
+    record_type.value = 'mouse'
     timerHandle.value.start()
     configMemo.setScrollMessage('录制中...')
     invoke<string>('record_mouse', { signal: configMemo.signalKeyCode })
@@ -106,7 +120,10 @@ const record_mouse = () => {
 
             <div class="operators">
                 <div class="back" @click="back">返回</div>
-                <div class="output" title="将记录导出为文件用于播放">导出</div>
+                <div class="output" title="将录制的记录导出, 可用于读取并播放"
+                     @click="output">
+                    导出
+                </div>
                 <div class="signal">
                     <span title="按下指定按键后停止录制">停止键:</span>
                     <span class="underlined" title="点击设置停止键"
@@ -124,8 +141,16 @@ const record_mouse = () => {
             </div>
         </div>
         <div class="records">
-            <div class="record-btn" @click="record_keyboard">录制键盘</div>
-            <div class="record-btn" @click="record_mouse">录制鼠标</div>
+            <div class="record-btn"
+                 @click="record_keyboard"
+                 title="点击开始录制键盘行为">
+                录制键盘
+            </div>
+            <div class="record-btn"
+                 @click="record_mouse"
+                 title="点击开始录制鼠标行为">
+                录制鼠标
+            </div>
         </div>
     </div>
 </template>
@@ -197,7 +222,8 @@ const record_mouse = () => {
                     max-height: 5rem;
                     left: calc(100% + 5px);
                     bottom: 0;
-                    border: solid 1px var(--border-color);
+                    border: solid 1px var(--separator-stroke);
+                    border-radius: 2px;
                     background-color: var(--background-color);
                     font-size: 0.75rem;
                     overflow: hidden auto;
