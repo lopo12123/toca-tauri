@@ -35,10 +35,13 @@ const useTools = (type: 'pin' | 'min' | 'refresh' | 'exit') => {
             window.location.reload()
             break
         case "exit":
-            appWindow.close()
-                .catch(() => {
-                    useNotification('退出失败')
-                })
+            configMemo.setAppStatus('close')
+            setTimeout(() => {
+                appWindow.close()
+                    .catch(() => {
+                        useNotification('退出失败')
+                    })
+            }, 1_000)
             break
     }
 }
