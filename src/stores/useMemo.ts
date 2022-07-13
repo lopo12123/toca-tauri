@@ -1,9 +1,12 @@
 import { defineStore } from "pinia";
 
+type AppStatus = 'open' | 'close' | 'normal'
+
 export default defineStore({
     id: 'memo',
     state() {
         return {
+            appStatus: 'normal' as AppStatus,
             alwaysOnTop: JSON.parse(localStorage.getItem('alwaysOnTop') ?? 'false') as boolean,
             globalAlpha: JSON.parse(localStorage.getItem('globalAlpha') ?? '1'),
             scrollMessage: '',
@@ -11,6 +14,9 @@ export default defineStore({
         }
     },
     actions: {
+        setAppStatus(status: AppStatus) {
+            this.appStatus = status
+        },
         toggleAlwaysOnTop() {
             this.alwaysOnTop = !this.alwaysOnTop
             localStorage.setItem('alwaysOnTop', JSON.stringify(this.alwaysOnTop))
