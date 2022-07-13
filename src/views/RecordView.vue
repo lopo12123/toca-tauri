@@ -15,6 +15,8 @@ const timerHandle = ref<TimerHandle>({
     start: () => {
     },
     stop: () => {
+    },
+    setLabel: () => {
     }
 })
 const bindTimerHandle = (handle: TimerHandle) => {
@@ -109,7 +111,7 @@ const record_mouse = () => {
 
 <template>
     <div class="record-view" data-tauri-drag-region>
-        <div class="timer">
+        <div class="dashboard">
             <TickTimer @tick-ready="bindTimerHandle"/>
 
             <div class="operators">
@@ -122,8 +124,8 @@ const record_mouse = () => {
                     <span title="按下指定按键后停止录制">停止键:</span>
                     <span class="underlined" title="点击设置停止键"
                           @click="ifSetting = !ifSetting">
-                    {{ configMemo.signalKeyCode }}
-                </span>
+                        {{ configMemo.signalKeyCode }}
+                    </span>
                     <div class="custom-selector" v-if="ifSetting">
                         <div class="fake-option" :title="item.name"
                              v-for="item in ValidSignalKey" :key="item.code"
@@ -137,12 +139,12 @@ const record_mouse = () => {
         <div class="records">
             <div class="record-btn"
                  @click="record_keyboard"
-                 title="点击开始录制键盘行为">
+                 title="开始录制键盘行为">
                 录制键盘
             </div>
             <div class="record-btn"
                  @click="record_mouse"
-                 title="点击开始录制鼠标行为">
+                 title="开始录制鼠标行为">
                 录制鼠标
             </div>
         </div>
@@ -161,7 +163,7 @@ const record_mouse = () => {
     align-items: center;
     justify-content: space-between;
 
-    .timer {
+    .dashboard {
         position: relative;
         width: calc(100% - 5.5rem);
         height: 100%;
