@@ -74,16 +74,27 @@ onMounted(() => {
                 </div>
             </div>
         </div>
-        <div class="operate-btn"
-             data-tauri-drag-region>
-            <div class="btn" @click="opacityAdjusterVisible = !opacityAdjusterVisible">0</div>
-            <div :class="['btn', configMemo.alwaysOnTop ? 'btn-active' : '']"
-                 @click="useTools('pin')">
-                1
+        <div class="operate-btn" data-tauri-drag-region>
+            <div class="btn" title="调整透明度"
+                 @click="opacityAdjusterVisible = !opacityAdjusterVisible">
+                <i class="iconfont icon-toumingdu"/>
             </div>
-            <div class="btn" @click="useTools('min')">2</div>
-            <div class="btn" @click="useTools('refresh')">3</div>
-            <div class="btn" @click="useTools('exit')">4</div>
+            <div class="btn" title="窗口置于顶层"
+                 @click="useTools('pin')">
+                <i :class="`iconfont ${configMemo.alwaysOnTop ? 'icon-tuding' : 'icon-pin'}`"/>
+            </div>
+            <div class="btn" title="最小化"
+                 @click="useTools('min')">
+                <i class="iconfont icon-iczoomout2"/>
+            </div>
+            <div class="btn" title="刷新"
+                 @click="useTools('refresh')">
+                <i class="iconfont icon-shuaxin1"/>
+            </div>
+            <div class="btn" title="退出"
+                 @click="useTools('exit')">
+                <i class="iconfont icon-tuichu"/>
+            </div>
         </div>
     </div>
 </template>
@@ -153,13 +164,10 @@ onMounted(() => {
             position: relative;
             width: 1rem;
             height: 1rem;
-            text-align: center;
-            line-height: 1rem;
             cursor: pointer;
-
-            &:hover {
-                outline: solid 1px var(--border-color);
-            }
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .btn-active {
