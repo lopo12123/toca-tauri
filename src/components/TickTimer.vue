@@ -69,17 +69,14 @@ const startTick = (initial_ms: number, to: 'increase' | 'decrease') => {
 
                     if(min.value > 0) min.value -= 1
                     // 借位 1hour
-                    else {
-                        if(hour.value > 0) {
-                            min.value = 59
-                            hour.value -= 1
-                        }
-                        else {
-                            clearInterval(timerId.value)
-                        }
+                    else if(hour.value > 0) {
+                        min.value = 59
+                        hour.value -= 1
                     }
                 }
             }
+
+            if(hour.value === 0 && min.value === 0 && sec.value === 0 && dot_sec.value === 0) stopTick()
         }, 100)
     }
     isTiming.value = true
