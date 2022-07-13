@@ -3,7 +3,8 @@ import { onBeforeUnmount, onMounted, ref } from "vue";
 
 export type TimerHandle = {
     start: (initial_ms: number, to: 'increase' | 'decrease') => void,
-    stop: () => void
+    stop: () => void,
+    setLabel: (ms: number) => void
 }
 
 const emits = defineEmits<{
@@ -85,9 +86,25 @@ const stopTick = () => {
     clearInterval(timerId.value)
     isTiming.value = false
 }
+const setLabel = (ms: number) => {
+    // 正在计时时禁止手动介入修改
+    if(isTiming.value) return;
+
+    // 1h = 60 * 60 * 1_000 ms
+    hour.value = Math.floor(ms / 3_600_000)
+    ms %= 3_600_000
+    // 1min = 60 * 1_000 ms
+    min.value = Math.floor(ms / 60_000)
+    ms %= 60_000
+    // 1sec = 1_000 ms
+    sec.value = Math.floor(ms / 1_000)
+    ms %= 1_000
+    // 0.1sec = 100 ms
+    dot_sec.value = Math.floor(ms / 100)
+}
 
 onMounted(() => {
-    emits('tickReady', { start: startTick, stop: stopTick })
+    emits('tickReady', { start: startTick, stop: stopTick, setLabel })
 })
 onBeforeUnmount(() => {
     stopTick()
