@@ -1,7 +1,9 @@
 import SHA256 from "crypto-js/sha256";
 import { XMLBuilder, XMLParser } from "fast-xml-parser";
 
-type KeyboardAction = {
+export type XMLError = 'EHash' | 'EParse' | 'EType'
+
+export type KeyboardAction = {
     evs: {
         code: string
         press: boolean
@@ -9,7 +11,7 @@ type KeyboardAction = {
     }[]
     till: number
 }
-type MouseAction = {
+export type MouseAction = {
     evs: {
         ev_name: 1 | 2 | 3 | 4 | 5 | 6
         position: [ number, number ]
@@ -17,7 +19,7 @@ type MouseAction = {
     }[]
     till: number
 }
-type XMLStruct = {
+export type XMLStruct = {
     Toca: {
         hash: string
         action_type: 'keyboard' | 'mouse'
@@ -30,13 +32,33 @@ type XMLStruct = {
  * @param xml_obj
  * @param action_type
  */
-const doVerify = (xml_obj: XMLStruct, action_type: 'keyboard' | 'mouse'): boolean => {
+const doVerify_object = (xml_obj: XMLStruct, action_type: 'keyboard' | 'mouse'): XMLError | 'True' => {
     try {
         const hash_again = SHA256(JSON.stringify(xml_obj.Toca.action)) + ''
-        return hash_again === xml_obj.Toca.hash && action_type === xml_obj.Toca.action_type
+        if(hash_again !== xml_obj.Toca.hash) return 'EHash'
+        else if(action_type !== xml_obj.Toca.action_type) return 'EType'
+        else return 'True'
     }
     catch (e) {
-        return false
+        return 'EParse'
+    }
+}
+/**
+ * @description 校验文件 hash 和 类型 是否正确
+ * @param xml_str
+ * @param action_type
+ */
+const doVerify_string = (xml_str: string, action_type: 'keyboard' | 'mouse'): XMLError | 'True' => {
+    try {
+        const xml_obj = new XMLParser().parse(xml_str) as XMLStruct
+        const hash_again = SHA256(JSON.stringify(xml_obj.Toca.action)) + ''
+        
+        if(hash_again !== xml_obj.Toca.hash) return 'EHash'
+        else if(action_type !== xml_obj.Toca.action_type) return 'EType'
+        else return 'True'
+    }
+    catch (e) {
+        return 'EParse'
     }
 }
 
@@ -57,16 +79,19 @@ const obj2xml = (action_obj: KeyboardAction | MouseAction, action_type: 'keyboar
     }
 }
 
-const xml2obj = (xml_str: string, action_type: 'keyboard' | 'mouse', verify: boolean = false): XMLStruct | null => {
+const xml2obj = (xml_str: string, action_type: 'keyboard' | 'mouse', verify: boolean = false): XMLStruct | XMLError => {
     try {
         const xml_obj = new XMLParser().parse(xml_str) as XMLStruct
 
-        if(verify && !doVerify(xml_obj, action_type)) return null
+        if(verify) {
+            const verify_result = doVerify_object(xml_obj, action_type)
+            if(verify_result !== 'True') return verify_result
+        }
 
         return xml_obj
     }
     catch (e) {
-        return null
+        return 'EParse'
     }
 }
 
@@ -78,7 +103,7 @@ const download_xml = (xml: string, action_type: 'keyboard' | 'mouse') => {
 }
 
 export {
-    doVerify,
+    doVerify_object, doVerify_string,
     xml2obj, obj2xml,
     download_xml
 }
