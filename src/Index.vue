@@ -23,11 +23,16 @@ onMounted(() => {
     //     e.preventDefault()
     //     e.stopPropagation()
     // }
+
+    configMemo.setAppStatus('open')
+    setTimeout(() => {
+        configMemo.setAppStatus('normal')
+    }, 1_000)
 })
 </script>
 
 <template>
-    <div class="index global" :style="`opacity: ${configMemo.globalAlpha}`">
+    <div :class="['index', 'global', configMemo.appStatus]" :style="`opacity: ${configMemo.globalAlpha}`">
         <div class="banner-container">
             <GlobalBanner/>
         </div>
@@ -40,6 +45,34 @@ onMounted(() => {
 <style lang="scss" scoped>
 @use "src/styles/mixin";
 
+.open {
+    animation: anime-open 1s forwards;
+    @keyframes anime-open {
+        0% {
+            width: 0;
+            left: 50%;
+        }
+        100% {
+            width: calc(100% - 4px);
+            left: 0;
+        }
+    }
+}
+
+.close {
+    animation: anime-close 1s forwards;
+    @keyframes anime-close {
+        0% {
+            width: calc(100% - 4px);
+            left: 0;
+        }
+        100% {
+            width: 0;
+            left: 50%;
+        }
+    }
+}
+
 .index {
     @include mixin.scrollBarStyle(var(--scroll-bar-color));
     position: relative;
@@ -51,11 +84,11 @@ onMounted(() => {
     border-radius: 5px;
     background-color: var(--background-color);
     color: var(--text-color);
+    overflow: hidden;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    overflow: auto;
 
     .banner-container {
         position: relative;
