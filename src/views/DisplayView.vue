@@ -5,6 +5,7 @@ import useMemo from "@/stores/useMemo";
 import { xml2obj, XMLStruct } from "@/scripts/useXml";
 import TickTimer, { TimerHandle } from "@/components/TickTimer.vue";
 import { useRouter } from "vue-router";
+import { invoke } from "@tauri-apps/api";
 
 const configMemo = useMemo()
 
@@ -76,9 +77,25 @@ const load_action = (type: 'keyboard' | 'mouse') => {
 
 // region 自动播放
 const start_display = () => {
-    if(action_obj.value === null) useNotification('请先选择并载入文件')
+    if(action_obj.value === null || action_type.value === 'none') useNotification('请先选择并载入文件')
     else {
-        console.log('行为对象: ', action_obj.value)
+        configMemo.setScrollMessage('播放中...')
+        timerHandle.value.start(action_obj.value.Toca.action.till, 'decrease')
+        invoke<boolean>(
+            `display_${ action_type.value }`,
+            {
+                actionString: JSON.stringify(action_obj.value.Toca.action)
+            })
+            .then(res => {
+                // timerHandle.value.stop()
+                configMemo.setScrollMessage('')
+                useNotification('播放结束, 可再次点击播放按钮进行重播')
+            })
+            .catch(err => {
+                // timerHandle.value.stop()
+                configMemo.setScrollMessage('')
+                useNotification('播放出错')
+            })
     }
 }
 // endregion
