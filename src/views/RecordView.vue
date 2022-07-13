@@ -67,7 +67,7 @@ const record_keyboard = () => {
 
     // 启动录制: 阻塞线程
     record_type.value = 'keyboard'
-    timerHandle.value.start()
+    timerHandle.value.start(0, 'increase')
     configMemo.setScrollMessage('录制中...')
     invoke<string>('record_keyboard', { signal: configMemo.signalKeyCode })
         .then(res => {
@@ -89,7 +89,7 @@ const record_mouse = () => {
 
     // 启动录制: 阻塞线程
     record_type.value = 'mouse'
-    timerHandle.value.start()
+    timerHandle.value.start(0, 'increase')
     configMemo.setScrollMessage('录制中...')
     invoke<string>('record_mouse', { signal: configMemo.signalKeyCode })
         .then(res => {

@@ -2,7 +2,7 @@
 import { onBeforeUnmount, onMounted, ref } from "vue";
 
 export type TimerHandle = {
-    start: () => void,
+    start: (initial_ms: number, to: 'increase' | 'decrease') => void,
     stop: () => void
 }
 
@@ -31,27 +31,57 @@ const startTick = (initial_ms: number, to: 'increase' | 'decrease') => {
     // 0.1sec = 100 ms
     dot_sec.value = Math.floor(initial_ms / 100)
 
-    timerId.value = setInterval(() => {
-        if(dot_sec.value < 9) dot_sec.value += 1
-        // 进位 1s
-        else {
-            dot_sec.value = 0
-
-            if(sec.value < 59) sec.value += 1
-            // 进位 1min
+    // 增/减
+    if(to === 'increase') {
+        timerId.value = setInterval(() => {
+            if(dot_sec.value < 9) dot_sec.value += 1
+            // 进位 1s
             else {
-                sec.value = 0
+                dot_sec.value = 0
 
-                if(min.value < 59) min.value += 1
-                // 进位 1hour
+                if(sec.value < 59) sec.value += 1
+                // 进位 1min
                 else {
-                    min.value = 0
+                    sec.value = 0
 
-                    hour.value = hour.value + 1
+                    if(min.value < 59) min.value += 1
+                    // 进位 1hour
+                    else {
+                        min.value = 0
+
+                        hour.value = hour.value + 1
+                    }
                 }
             }
-        }
-    }, 100)
+        }, 100)
+    }
+    else if(to === 'decrease') {
+        timerId.value = setInterval(() => {
+            if(dot_sec.value > 0) dot_sec.value -= 1
+            // 借位 1s
+            else {
+                dot_sec.value = 9
+
+                if(sec.value > 0) sec.value -= 1
+                // 借位 1min
+                else {
+                    sec.value = 59
+
+                    if(min.value > 0) min.value -= 1
+                    // 借位 1hour
+                    else {
+                        if(hour.value > 0) {
+                            min.value = 59
+                            hour.value -= 1
+                        }
+                        else {
+                            clearInterval(timerId.value)
+                        }
+                    }
+                }
+            }
+        }, 100)
+    }
     isTiming.value = true
 }
 const stopTick = () => {
