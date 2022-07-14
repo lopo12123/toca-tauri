@@ -53,6 +53,7 @@
         },
         "windows": [
             {
+                "label": "main",
                 "title": "Toca",
                 "decorations": false,
                 "width": 300,
