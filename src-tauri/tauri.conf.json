@@ -60,6 +60,7 @@
                 "height": 100,
                 "minWidth": 300,
                 "minHeight": 100,
+                "center": true,
                 "resizable": false,
                 "transparent": true,
                 "fullscreen": false,
