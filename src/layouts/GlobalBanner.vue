@@ -15,6 +15,10 @@ const opacityAdjusterVisible = ref(false)
 
 // 固定 最小 重新载入 退出
 const useTools = (type: 'pin' | 'min' | 'refresh' | 'exit') => {
+    if(configMemo.isWorking) {
+        useNotification('正在录制/播放, 请结束后再试')
+        return;
+    }
     switch(type) {
         case "pin":
             appWindow.setAlwaysOnTop(!configMemo.alwaysOnTop)
