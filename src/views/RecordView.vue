@@ -28,6 +28,10 @@ const bindTimerHandle = (handle: TimerHandle) => {
 // region 返回
 const router = useRouter()
 const back = () => {
+    if(configMemo.isWorking) {
+        useNotification('正在录制/播放, 请结束后再试')
+        return;
+    }
     router.push({
         name: 'Home'
     })
@@ -41,7 +45,10 @@ const record_type = ref<'keyboard' | 'mouse'>('keyboard')
 const record_string = ref('')
 // 导出为文件
 const output = () => {
-    if(record_string.value === '') {
+    if(configMemo.isWorking) {
+        useNotification('正在录制/播放, 请结束后再试')
+    }
+    else if(record_string.value === '') {
         useNotification('暂无记录, 请先进行录制')
     }
     else {
@@ -55,61 +62,100 @@ const output = () => {
 
 // region 设置停止录制按钮
 const ifSetting = ref(false)
+const startSetting = () => {
+    if(configMemo.isWorking) {
+        useNotification('正在录制/播放, 请结束后再试')
+    }
+    else ifSetting.value = !ifSetting.value
+}
 const updateSignal = (code: string, name: string) => {
-    configMemo.updateSignalKeyCode(code)
-    ifSetting.value = false
-    useNotification(`停止键修改为: ${ name }`)
+    if(configMemo.isWorking) {
+        useNotification('正在录制/播放, 请结束后再试')
+    }
+    else {
+        configMemo.updateSignalKeyCode(code)
+        ifSetting.value = false
+        useNotification(`停止键修改为: ${ name }`)
+    }
 }
 // endregion
 
 // region 录制
 // 录制键盘
 const record_keyboard = () => {
-    // 启动下次录制前先重置
-    record_string.value = ''
+    if(configMemo.isWorking) {
+        useNotification('正在录制/播放, 请结束后再试')
+    }
+    else {
+        // 加锁
+        configMemo.setWorking(true)
 
-    // 守卫 提示信息
-    record_type.value = 'keyboard'
-    timerHandle.value.start(0, 'increase')
-    configMemo.setScrollMessage('录制中...')
+        // 启动下次录制前先重置
+        record_string.value = ''
 
-    // 启动录制: 阻塞线程
-    invoke<string>('record_keyboard_async', { signal: configMemo.signalKeyCode })
-        .then(res => {
-            record_string.value = res
-            timerHandle.value.stop()
-            configMemo.setScrollMessage('')
-            useNotification('录制结束, 使用导出按钮保存记录')
-        })
-        .catch(err => {
-            console.log(err)
-            timerHandle.value.stop()
-            configMemo.setScrollMessage('')
-            useNotification('录制键盘行为出错')
-        })
+        // 守卫 提示信息
+        record_type.value = 'keyboard'
+        timerHandle.value.start(0, 'increase')
+        configMemo.setScrollMessage('录制中...')
+
+        // 启动录制: 阻塞线程
+        invoke<string>('record_keyboard_async', { signal: configMemo.signalKeyCode })
+            .then(res => {
+                record_string.value = res
+                timerHandle.value.stop()
+                configMemo.setScrollMessage('')
+                useNotification('录制结束, 使用导出按钮保存记录')
+
+                // 解锁
+                configMemo.setWorking(false)
+            })
+            .catch(err => {
+                console.log(err)
+                timerHandle.value.stop()
+                configMemo.setScrollMessage('')
+                useNotification('录制键盘行为出错')
+
+                // 解锁
+                configMemo.setWorking(false)
+            })
+    }
 }
 
 // 录制鼠标
 const record_mouse = () => {
-    // 启动下次录制前先重置
-    record_string.value = ''
+    if(configMemo.isWorking) {
+        useNotification('正在录制/播放, 请结束后再试')
+    }
+    else {
+        // 加锁
+        configMemo.setWorking(true)
 
-    // 启动录制: 阻塞线程
-    record_type.value = 'mouse'
-    timerHandle.value.start(0, 'increase')
-    configMemo.setScrollMessage('录制中...')
-    invoke<string>('record_mouse_async', { signal: configMemo.signalKeyCode })
-        .then(res => {
-            record_string.value = res
-            timerHandle.value.stop()
-            configMemo.setScrollMessage('')
-            useNotification('录制结束, 使用导出按钮保存记录')
-        })
-        .catch(err => {
-            timerHandle.value.stop()
-            configMemo.setScrollMessage('')
-            useNotification('录制鼠标行为出错')
-        })
+        // 启动下次录制前先重置
+        record_string.value = ''
+
+        // 启动录制: 阻塞线程
+        record_type.value = 'mouse'
+        timerHandle.value.start(0, 'increase')
+        configMemo.setScrollMessage('录制中...')
+        invoke<string>('record_mouse_async', { signal: configMemo.signalKeyCode })
+            .then(res => {
+                record_string.value = res
+                timerHandle.value.stop()
+                configMemo.setScrollMessage('')
+                useNotification('录制结束, 使用导出按钮保存记录')
+
+                // 解锁
+                configMemo.setWorking(false)
+            })
+            .catch(err => {
+                timerHandle.value.stop()
+                configMemo.setScrollMessage('')
+                useNotification('录制鼠标行为出错')
+
+                // 解锁
+                configMemo.setWorking(false)
+            })
+    }
 }
 // endregion
 </script>
@@ -128,7 +174,7 @@ const record_mouse = () => {
                 <div class="signal">
                     <span title="按下指定按键后停止录制">停止键:</span>
                     <span class="underlined" title="点击设置停止键"
-                          @click="ifSetting = !ifSetting">
+                          @click="startSetting">
                         {{ configMemo.signalKeyCode }}
                     </span>
                     <div class="custom-selector" v-if="ifSetting">
