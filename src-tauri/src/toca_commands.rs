@@ -1,9 +1,9 @@
 //! 将 `toca` 方法封装成 `tauri` 指令, 供 `Js` 直接调用
 use toca::{KeyboardAction, KeyboardMapper, KeyboardPlayer, KeyboardRecorder, MouseAction, MousePlayer, MouseRecorder};
+use tauri::command;
 
 // region keyboard
-/// 标记为 Rust 命令, 可通过 Js 直接调用
-#[tauri::command]
+/// 录制键盘
 pub fn record_keyboard(signal: String) -> String {
     match KeyboardMapper::front_to_dq(&signal) {
         Some(key) => {
@@ -16,8 +16,13 @@ pub fn record_keyboard(signal: String) -> String {
     }
 }
 
-/// 标记为 Rust 命令, 可通过 Js 直接调用
-#[tauri::command]
+/// 异步录制键盘
+#[command]
+pub async fn record_keyboard_async(signal: String) -> String {
+    record_keyboard(signal)
+}
+
+/// 播放键盘
 pub fn display_keyboard(action_string: String) -> bool {
     let mut player = KeyboardPlayer::new();
 
@@ -36,11 +41,16 @@ pub fn display_keyboard(action_string: String) -> bool {
         Err(_) => false
     }
 }
+
+/// 异步播放键盘
+#[command]
+pub async fn display_keyboard_async(action_string: String) -> bool {
+    display_keyboard(action_string)
+}
 // endregion
 
 // region mouse
-/// 标记为 Rust 命令, 可通过 Js 直接调用
-#[tauri::command]
+/// 录制鼠标
 pub fn record_mouse(signal: String) -> String {
     match KeyboardMapper::front_to_dq(&signal) {
         Some(key) => {
@@ -53,8 +63,13 @@ pub fn record_mouse(signal: String) -> String {
     }
 }
 
-/// 标记为 Rust 命令, 可通过 Js 直接调用
-#[tauri::command]
+/// 异步录制鼠标
+#[command]
+pub async fn record_mouse_async(signal: String) -> String {
+    record_mouse(signal)
+}
+
+/// 播放鼠标
 pub fn display_mouse(action_string: String) -> bool {
     let mut player = MousePlayer::new();
 
@@ -72,6 +87,12 @@ pub fn display_mouse(action_string: String) -> bool {
         }
         Err(_) => false
     }
+}
+
+/// 异步播放鼠标
+#[command]
+pub async fn display_mouse_async(action_string: String) -> bool {
+    display_mouse(action_string)
 }
 // endregion
 
