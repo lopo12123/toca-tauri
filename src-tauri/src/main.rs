@@ -5,11 +5,19 @@ windows_subsystem = "windows"
 
 mod toca_commands;
 
-use tauri::{Builder, generate_context, generate_handler};
+use tauri::{Builder, generate_context, generate_handler, Manager};
 use toca_commands::{record_keyboard, record_mouse, display_keyboard, display_mouse};
 
 fn main() {
     Builder::default()
+        .setup(|app| {
+            let main_window = app.get_window("main").unwrap();
+
+            // 窗口居中
+            main_window.center().unwrap();
+            Ok(())
+        })
+
         // ipc 命令 - javascript 端使用 invoke(cmd, args) 调用
         .invoke_handler(generate_handler![
             record_keyboard,
