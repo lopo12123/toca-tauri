@@ -6,6 +6,7 @@ export default defineStore({
     id: 'memo',
     state() {
         return {
+            isWorking: false,
             appStatus: 'normal' as AppStatus,
             alwaysOnTop: JSON.parse(localStorage.getItem('alwaysOnTop') ?? 'false') as boolean,
             globalAlpha: JSON.parse(localStorage.getItem('globalAlpha') ?? '1'),
@@ -14,6 +15,9 @@ export default defineStore({
         }
     },
     actions: {
+        setWorking(isWorking: boolean) {
+            this.isWorking = isWorking
+        },
         setAppStatus(status: AppStatus) {
             this.appStatus = status
         },
