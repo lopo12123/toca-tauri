@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 3519833 */
-  src: url('iconfont.woff2?t=1657704382401') format('woff2'),
-       url('iconfont.woff?t=1657704382401') format('woff'),
-       url('iconfont.ttf?t=1657704382401') format('truetype');
+  src: url('iconfont.woff2?t=1657806515197') format('woff2'),
+       url('iconfont.woff?t=1657806515197') format('woff'),
+       url('iconfont.ttf?t=1657806515197') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,10 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-tiyu-gaoerfuqiu:before {
+  content: "\e65c";
 }
 
 .icon-shuaxin1:before {

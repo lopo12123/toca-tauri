@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "3794026",
+      "name": "体育-高尔夫球",
+      "font_class": "tiyu-gaoerfuqiu",
+      "unicode": "e65c",
+      "unicode_decimal": 58972
+    },
+    {
       "icon_id": "5387549",
       "name": "刷新",
       "font_class": "shuaxin1",
