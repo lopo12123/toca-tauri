@@ -15,10 +15,8 @@ import { createPinia } from "pinia";
 import { router } from "@/routers";
 import Index from "./Index.vue";
 
-document.documentElement.className = 'elder-' + (localStorage.getItem('elderMode') ?? 'disable')
-
 createApp(Index)
-    .use(ElementPlus)
-    .use(createPinia())
     .use(router)
+    .use(createPinia())
+    .use(ElementPlus)
     .mount('#app')
