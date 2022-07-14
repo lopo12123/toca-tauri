@@ -13,7 +13,7 @@ const _slider_value_receiver = ref(configMemo.globalAlpha)
 // 透明度调整条是否可见
 const opacityAdjusterVisible = ref(false)
 
-// 固定 最小 刷新 退出
+// 固定 最小 重新载入 退出
 const useTools = (type: 'pin' | 'min' | 'refresh' | 'exit') => {
     switch(type) {
         case "pin":
@@ -90,7 +90,7 @@ onMounted(() => {
                  @click="useTools('min')">
                 <i class="iconfont icon-iczoomout2"/>
             </div>
-            <div class="btn" title="刷新"
+            <div class="btn" title="重新载入"
                  @click="useTools('refresh')">
                 <i class="iconfont icon-shuaxin1"/>
             </div>
