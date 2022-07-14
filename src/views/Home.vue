@@ -64,16 +64,9 @@ const makeChoice = (choice: 'record' | 'display') => {
         </div>
 
         <div class="overview">
-            <div class="logo">a logo here.</div>
-<!--            <div class="license">-->
-<!--                <div class="inner">-->
-<!--                    The-->
-<!--                    <span class="link-text" @click="openLink('project')">project</span>-->
-<!--                    is licensed under-->
-<!--                    <span class="link-text" @click="openLink('mit')">"MIT"</span>.-->
-<!--                </div>-->
-<!--            </div>-->
+            <i class="iconfont icon-tiyu-gaoerfuqiu"/>
         </div>
+
         <div class="options">
             <div class="option-btn" @click="makeChoice('record')">录制</div>
             <div class="option-btn" @click="makeChoice('display')">播放</div>
@@ -102,23 +95,8 @@ const makeChoice = (choice: 'record' | 'display') => {
         align-items: center;
         justify-content: center;
 
-        .license {
-            position: relative;
-            width: 100%;
-            background-color: var(--background-color);
-
-            .inner {
-                //@include mixin.textInLine;
-                position: relative;
-                font-size: 0.875rem;
-                font-style: italic;
-                word-break: break-word;
-
-                .link-text {
-                    text-decoration: underline;
-                    cursor: pointer;
-                }
-            }
+        i {
+            font-size: 2rem;
         }
     }
 
