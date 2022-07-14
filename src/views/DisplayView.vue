@@ -26,7 +26,8 @@ const bindTimerHandle = (handle: TimerHandle) => {
 // region 返回
 const router = useRouter()
 const back = () => {
-    router.push({
+    if(configMemo.isWorking) useNotification('正在录制/播放, 请结束后再试')
+    else router.push({
         name: 'Home'
     })
 }
@@ -41,48 +42,53 @@ const type2name = {
 const action_type = ref<'keyboard' | 'mouse' | 'none'>('none')
 const action_obj = ref<XMLStruct | null>(null)
 const load_action = (type: 'keyboard' | 'mouse') => {
-    const ipt = document.createElement('input')
-    ipt.type = 'file'
-    ipt.accept = '.toca'
-    ipt.onchange = () => {
-        if(!ipt.files || ipt.files.length === 0) {
-            useNotification('请选择记录文件')
-        }
-        else {
-            configMemo.setScrollMessage('解析中...')
-            action_type.value = type
-            const reader = new FileReader()
-            reader.onload = () => {
-                const try_parse = xml2obj(reader.result as string, type, true)
+    if(configMemo.isWorking) useNotification('正在录制/播放, 请结束后再试')
+    else {
+        const ipt = document.createElement('input')
+        ipt.type = 'file'
+        ipt.accept = '.toca'
+        ipt.onchange = () => {
+            if(!ipt.files || ipt.files.length === 0) {
+                useNotification('请选择记录文件')
+            }
+            else {
+                configMemo.setScrollMessage('解析中...')
+                action_type.value = type
+                const reader = new FileReader()
+                reader.onload = () => {
+                    const try_parse = xml2obj(reader.result as string, type, true)
 
-                if(try_parse === 'EType') useNotification('文件类型错误')
-                else if(try_parse === 'EHash') useNotification('文件已被篡改')
-                else if(try_parse === 'EParse') useNotification('文件解析失败')
-                else {
-                    action_obj.value = try_parse
-                    timerHandle.value.setLabel(try_parse.Toca.action.till)
+                    if(try_parse === 'EType') useNotification('文件类型错误')
+                    else if(try_parse === 'EHash') useNotification('文件已被篡改')
+                    else if(try_parse === 'EParse') useNotification('文件解析失败')
+                    else {
+                        action_obj.value = try_parse
+                        timerHandle.value.setLabel(try_parse.Toca.action.till)
+                    }
+
+                    configMemo.setScrollMessage('')
                 }
-
-                configMemo.setScrollMessage('')
+                reader.onerror = () => {
+                    useNotification('文件读取失败')
+                }
+                reader.readAsText(ipt.files[0])
             }
-            reader.onerror = () => {
-                useNotification('文件读取失败')
-            }
-            reader.readAsText(ipt.files[0])
         }
+        ipt.click()
     }
-    ipt.click()
 }
 // endregion
 
 // region 自动播放
 const start_display = () => {
-    if(action_obj.value === null || action_type.value === 'none') useNotification('请先选择并载入文件')
+    if(configMemo.isWorking) useNotification('正在录制/播放, 请结束后再试')
+    else if(action_obj.value === null || action_type.value === 'none') useNotification('请先选择并载入文件')
     else {
+        configMemo.setWorking(true)
         configMemo.setScrollMessage('播放中...')
         timerHandle.value.start(action_obj.value.Toca.action.till, 'decrease')
         invoke<boolean>(
-            `display_${ action_type.value }`,
+            `display_${ action_type.value }_async`,
             {
                 actionString: JSON.stringify(action_obj.value.Toca.action)
             })
@@ -90,11 +96,13 @@ const start_display = () => {
                 // timerHandle.value.stop()
                 configMemo.setScrollMessage('')
                 useNotification('播放结束, 可再次点击播放按钮进行重播')
+                configMemo.setWorking(false)
             })
             .catch(err => {
                 // timerHandle.value.stop()
                 configMemo.setScrollMessage('')
                 useNotification('播放出错')
+                configMemo.setWorking(false)
             })
     }
 }
