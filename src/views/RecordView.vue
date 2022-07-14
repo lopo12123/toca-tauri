@@ -74,7 +74,7 @@ const record_keyboard = () => {
     configMemo.setScrollMessage('录制中...')
 
     // 启动录制: 阻塞线程
-    invoke<string>('record_keyboard', { signal: configMemo.signalKeyCode })
+    invoke<string>('record_keyboard_async', { signal: configMemo.signalKeyCode })
         .then(res => {
             record_string.value = res
             timerHandle.value.stop()
@@ -82,45 +82,13 @@ const record_keyboard = () => {
             useNotification('录制结束, 使用导出按钮保存记录')
         })
         .catch(err => {
+            console.log(err)
             timerHandle.value.stop()
             configMemo.setScrollMessage('')
             useNotification('录制键盘行为出错')
         })
 }
 
-/**
- * @deprecated
- */
-const record_keyboard_async = () => {
-    // 启动下次录制前先重置
-    record_string.value = ''
-
-    // 守卫 提示信息
-    record_type.value = 'keyboard'
-    timerHandle.value.start(0, 'increase')
-    configMemo.setScrollMessage('录制中...')
-
-    // 启动录制: 异步, 监听事件
-    emit('record_keyboard_async', { signal: configMemo.signalKeyCode })
-        .then(() => {
-            // 发送后开始监听响应
-            listen<string>(
-                'record_keyboard_async',
-                (action_str) => {
-                    console.log(action_str.payload)
-                })
-                .then((unListen) => {
-                    // 监听到响应后取消监听器
-                    return unListen()
-                })
-                .catch(err => {
-                    useNotification('录制线程已断开连接')
-                })
-        })
-        .catch(() => {
-            useNotification('启动录制失败')
-        })
-}
 // 录制鼠标
 const record_mouse = () => {
     // 启动下次录制前先重置
@@ -130,7 +98,7 @@ const record_mouse = () => {
     record_type.value = 'mouse'
     timerHandle.value.start(0, 'increase')
     configMemo.setScrollMessage('录制中...')
-    invoke<string>('record_mouse', { signal: configMemo.signalKeyCode })
+    invoke<string>('record_mouse_async', { signal: configMemo.signalKeyCode })
         .then(res => {
             record_string.value = res
             timerHandle.value.stop()
