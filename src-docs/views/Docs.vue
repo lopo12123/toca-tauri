@@ -1,10 +1,12 @@
 <script lang="ts" setup>
-document.title = '123'
+
 </script>
 
 <template>
     <div class="docs">
-        docs
+        <div class="body-container">
+            body content
+        </div>
     </div>
 </template>
 
