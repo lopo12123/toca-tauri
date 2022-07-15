@@ -41,7 +41,7 @@ const mailToMe = () => {
     anchor.click()
 }
 const downloadApp = () => {
-
+    window.open('https://github.com/lopo12123/toca-tauri/releases/download/v0.1.0/toca_0.1.0_x64_en-US.msi', '__blank')
 }
 </script>
 
@@ -93,7 +93,7 @@ const downloadApp = () => {
                 </div>
                 <div class="list-box">
                     <div class="line" :key="'playback-'+idx"
-                         v-for="(item, idx) in RecordList">
+                         v-for="(item, idx) in DisplayList">
                         {{ item }}
                     </div>
                 </div>
