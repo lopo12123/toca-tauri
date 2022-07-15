@@ -15,10 +15,6 @@ const opacityAdjusterVisible = ref(false)
 
 // 固定 最小 重新载入 退出
 const useTools = (type: 'pin' | 'min' | 'refresh' | 'exit') => {
-    if(configMemo.isWorking) {
-        useNotification('正在录制/播放, 请结束后再试')
-        return;
-    }
     switch(type) {
         case "pin":
             appWindow.setAlwaysOnTop(!configMemo.alwaysOnTop)
@@ -36,16 +32,20 @@ const useTools = (type: 'pin' | 'min' | 'refresh' | 'exit') => {
                 })
             break
         case "refresh":
-            window.location.reload()
+            if(configMemo.isWorking) useNotification('正在录制/播放, 请结束后再试')
+            else window.location.reload()
             break
         case "exit":
-            configMemo.setAppStatus('close')
-            setTimeout(() => {
-                appWindow.close()
-                    .catch(() => {
-                        useNotification('退出失败')
-                    })
-            }, 1_000)
+            if(configMemo.isWorking) useNotification('正在录制/播放, 请结束后再试')
+            else {
+                configMemo.setAppStatus('close')
+                setTimeout(() => {
+                    appWindow.close()
+                        .catch(() => {
+                            useNotification('退出失败')
+                        })
+                }, 1_000)
+            }
             break
     }
 }
