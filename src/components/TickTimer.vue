@@ -1,5 +1,7 @@
 <script lang="ts" setup>
-import { onBeforeUnmount, onMounted, ref } from "vue";
+import { onBeforeUnmount, onMounted, ref, shallowRef } from "vue";
+import type { TickRequest, TickResponse } from "@/components/ticker";
+import { useNotification } from "@/scripts/useNotification";
 
 export type TimerHandle = {
     start: (initial_ms: number, to: 'increase' | 'decrease') => void,
@@ -86,6 +88,96 @@ const stopTick = () => {
     clearInterval(timerId.value)
     isTiming.value = false
 }
+// region 使用 worker 避免省电策略
+const tickWorker = shallowRef<Worker | null>(null)
+const startTickWorker = (initial_ms: number, to: 'increase' | 'decrease') => {
+    // 初始化
+    // 1h = 60 * 60 * 1_000 ms
+    hour.value = Math.floor(initial_ms / 3_600_000)
+    initial_ms %= 3_600_000
+    // 1min = 60 * 1_000 ms
+    min.value = Math.floor(initial_ms / 60_000)
+    initial_ms %= 60_000
+    // 1sec = 1_000 ms
+    sec.value = Math.floor(initial_ms / 1_000)
+    initial_ms %= 1_000
+    // 0.1sec = 100 ms
+    dot_sec.value = Math.floor(initial_ms / 100)
+
+    // 增/减
+    tickWorker.value = new Worker(new URL('./ticker', import.meta.url), { type: 'module' })
+    if(to === 'increase') {
+        tickWorker.value.onmessage = (ev) => {
+            const data: TickResponse = ev.data
+            if(data.status === 'pending') {
+                if(dot_sec.value < 9) dot_sec.value += 1
+                // 进位 1s
+                else {
+                    dot_sec.value = 0
+
+                    if(sec.value < 59) sec.value += 1
+                    // 进位 1min
+                    else {
+                        sec.value = 0
+
+                        if(min.value < 59) min.value += 1
+                        // 进位 1hour
+                        else {
+                            min.value = 0
+
+                            hour.value = hour.value + 1
+                        }
+                    }
+                }
+            }
+            else {
+                useNotification('计时线程出错')
+                isTiming.value = false
+            }
+        }
+    }
+    else if(to === 'decrease') {
+        tickWorker.value.onmessage = (ev) => {
+            const data: TickResponse = ev.data
+
+            if(data.status === 'pending') {
+                if(dot_sec.value > 0) dot_sec.value -= 1
+                // 借位 1s
+                else {
+                    dot_sec.value = 9
+
+                    if(sec.value > 0) sec.value -= 1
+                    // 借位 1min
+                    else {
+                        sec.value = 59
+
+                        if(min.value > 0) min.value -= 1
+                        // 借位 1hour
+                        else if(hour.value > 0) {
+                            min.value = 59
+                            hour.value -= 1
+                        }
+                    }
+                }
+
+                if(hour.value === 0 && min.value === 0 && sec.value === 0 && dot_sec.value === 0) stopTickWorker()
+            }
+            else {
+                useNotification('计时线程出错')
+                isTiming.value = false
+            }
+        }
+    }
+
+    isTiming.value = true
+    tickWorker.value.postMessage({ cmd: 'start', duration: 100 } as TickRequest)
+}
+const stopTickWorker = () => {
+    tickWorker.value?.terminate()
+    tickWorker.value = null
+    isTiming.value = false
+}
+// endregion
 const setLabel = (ms: number) => {
     // 正在计时时禁止手动介入修改
     if(isTiming.value) return;
@@ -104,10 +196,15 @@ const setLabel = (ms: number) => {
 }
 
 onMounted(() => {
-    emits('tickReady', { start: startTick, stop: stopTick, setLabel })
+    emits('tickReady', {
+        start: startTickWorker,  // startTick,
+        stop: stopTickWorker,  //stopTick,
+        setLabel
+    })
 })
 onBeforeUnmount(() => {
-    stopTick()
+    // stopTick()
+    stopTickWorker()
 })
 </script>
 
