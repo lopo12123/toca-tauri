@@ -1,13 +1,16 @@
 {
     "name": "toca",
     "private": true,
-    "version": "0.0.0",
+    "version": "0.1.0",
     "scripts": {
         "pre-gojs": "node pregojs.js",
         "dev": "vite --host",
         "dev:web": "vite --host",
+        "dev:docs": "vite --host --config vite.docs-config.ts",
         "dev:tauri": "tauri dev",
         "build": "vue-tsc --noEmit && vite build",
+        "build:web": "vue-tsc --noEmit && vite build",
+        "build:docs": "vue-tsc --noEmit && vite build --config vite.docs-config.ts",
         "build:tauri": "tauri build"
     },
     "dependencies": {
