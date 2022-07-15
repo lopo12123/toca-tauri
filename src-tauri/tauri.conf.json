@@ -12,6 +12,12 @@
     },
     "tauri": {
         "allowlist": {
+            "dialog": {
+                "save": true
+            },
+            "fs": {
+                "writeFile": true
+            },
             "notification": {
                 "all": true
             },
