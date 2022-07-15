@@ -7,6 +7,8 @@ import { useRouter } from "vue-router";
 import { ValidSignalKey } from "@/scripts/useMapper";
 import { useNotification } from "@/scripts/useNotification";
 import { download_xml, obj2xml } from "@/scripts/useXml";
+import { save } from "@tauri-apps/api/dialog";
+import { writeTextFile } from "@tauri-apps/api/fs";
 
 const configMemo = useMemo()
 
@@ -55,6 +57,48 @@ const output = () => {
 
         if(xml_str === null) useNotification('事件记录解析出错')
         else download_xml(xml_str, record_type.value)
+    }
+}
+// 使用 tauri-api 导出
+const output_fs = () => {
+    if(configMemo.isWorking) {
+        useNotification('正在录制/播放, 请结束后再试')
+    }
+    else if(record_string.value === '') {
+        useNotification('暂无记录, 请先进行录制')
+    }
+    else {
+        const xml_str = obj2xml(JSON.parse(record_string.value), record_type.value)
+
+        if(xml_str === null) useNotification('事件记录解析出错')
+        else {
+            const filename = `${ Date.now() }.${ record_type.value[0] }.toca`
+
+            configMemo.setScrollMessage('导出中...')
+            save({
+                title: '选择文件保存位置',
+                defaultPath: filename,
+                filters: [ {
+                    name: 'TOCA_RECORD_FILE',
+                    extensions: [ 'toca' ]
+                } ],
+            })
+                .then(dir => {
+                    if(!dir) {
+                        useNotification('请选择保存位置')
+                        return Promise.reject('null')
+                    }
+                    else return writeTextFile(dir, xml_str)
+                })
+                .then(() => {
+                    configMemo.setScrollMessage('')
+                    useNotification('导出成功')
+                })
+                .catch((err) => {
+                    configMemo.setScrollMessage('')
+                    if(err !== 'null') useNotification('导出失败')
+                })
+        }
     }
 }
 // endregion
@@ -146,7 +190,7 @@ const record_mouse = () => {
                 // 解锁
                 configMemo.setWorking(false)
             })
-            .catch(err => {
+            .catch(() => {
                 timerHandle.value.stop()
                 configMemo.setScrollMessage('')
                 useNotification('录制鼠标行为出错')
@@ -167,7 +211,7 @@ const record_mouse = () => {
             <div class="operators">
                 <div class="back" @click="back">返回</div>
                 <div class="output" title="将录制的记录导出, 可用于读取并播放"
-                     @click="output">
+                     @click="output_fs">
                     导出
                 </div>
                 <div class="signal">
