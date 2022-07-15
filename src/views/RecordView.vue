@@ -7,7 +7,6 @@ import { useRouter } from "vue-router";
 import { ValidSignalKey } from "@/scripts/useMapper";
 import { useNotification } from "@/scripts/useNotification";
 import { download_xml, obj2xml } from "@/scripts/useXml";
-import { emit, listen } from "@tauri-apps/api/event";
 
 const configMemo = useMemo()
 
