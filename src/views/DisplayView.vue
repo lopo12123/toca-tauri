@@ -3,7 +3,8 @@ import { ref } from "vue";
 import { useNotification } from "@/scripts/useNotification";
 import useMemo from "@/stores/useMemo";
 import { xml2obj, XMLStruct } from "@/scripts/useXml";
-import TickTimer, { TimerHandle } from "@/components/TickTimer.vue";
+import TickTimer from "@/components/TickTimer.vue";
+import type { TimerHandle } from "@/components/TickTimer.vue";
 import { useRouter } from "vue-router";
 import { invoke } from "@tauri-apps/api";
 
